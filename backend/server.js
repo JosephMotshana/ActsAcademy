@@ -1,39 +1,38 @@
 const express = require('express');
 const cors = require('cors');
-const mysql = require('mysql2');
 require('dotenv').config();
+const db = require('./config/db'); // Use the centralized DB config we created
+
+// Import Routes
+const authRoutes = require('./routes/authRoutes');
+const adminRoutes = require('./routes/adminRoutes');
 
 const app = express();
 
-// Middleware
+// --- Middleware ---
 app.use(cors());
-app.use(express.json()); // Allows us to parse JSON data from the frontend
+app.use(express.json()); // Only need this once to parse JSON bodies
 
-// Create a MySQL connection pool
-const db = mysql.createPool({
-  host: process.env.DB_HOST,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB_NAME,
-});
+// --- Routes ---
+app.use('/api/auth', authRoutes);
+app.use('/api/admin', adminRoutes);
 
-// Test the database connection
-db.getConnection((err, connection) => {
-  if (err) {
-    console.error('Error connecting to MySQL database:', err.message);
-  } else {
-    console.log('Successfully connected to MySQL database!');
-    connection.release(); // Release the connection back to the pool
-  }
-});
-
-// A simple test route
+// Simple health check route
 app.get('/api/status', (req, res) => {
   res.json({ message: 'LMS Backend is running smoothly!' });
 });
 
-// Start the server
+// --- Server Startup ---
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-});
+
+// Since db.js now exports a promise pool, we test connection like this:
+db.query('SELECT 1')
+  .then(() => {
+    console.log('Successfully connected to MySQL database!');
+    app.listen(PORT, () => {
+      console.log(`Server is running on port ${PORT}`);
+    });
+  })
+  .catch((err) => {
+    console.error('Error connecting to MySQL database:', err.message);
+  });
