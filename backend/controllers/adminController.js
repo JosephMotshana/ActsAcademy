@@ -92,3 +92,16 @@ exports.getAllStudents = async (req, res) => {
         res.status(500).json({ error: err.message });
     }
 };
+
+// DELETE A STUDENT
+exports.removeStudent = async (req, res) => {
+    const { id } = req.params;
+    try {
+        // This will remove the student from 'users' and 
+        // automatically clear their enrollments due to CASCADE.
+        await db.query('DELETE FROM users WHERE id = ? AND role = "STUDENT"', [id]);
+        res.json({ message: "Student removed successfully." });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+};

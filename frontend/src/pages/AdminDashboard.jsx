@@ -62,6 +62,16 @@ const AdminDashboard = () => {
             alert("Enrollment failed");
         }
     };
+    const deleteStudent = async (id) => {
+    if (window.confirm("Are you sure? This will remove the student from all classes!")) {
+        try {
+            await axios.delete(`http://localhost:5000/api/admin/student/${id}`);
+            fetchData(); // Refresh all lists
+        } catch (err) {
+            alert("Error removing student");
+        }
+    }
+};
 
     // 4. INITIAL LOAD
     useEffect(() => {
@@ -122,6 +132,22 @@ const AdminDashboard = () => {
 
         <button type="submit">Enroll Student in Class</button>
     </form>
+</div>
+<div style={{ marginTop: '20px' }}>
+    <h3>Active Students</h3>
+    <ul>
+        {students.map(std => (
+            <li key={std.id} style={{ marginBottom: '10px' }}>
+                {std.username} ({std.email})
+                <button 
+                    onClick={() => deleteStudent(std.id)} 
+                    style={{ marginLeft: '10px', color: 'orange', fontSize: '11px' }}
+                >
+                    Delete Student
+                </button>
+            </li>
+        ))}
+    </ul>
 </div>
             </div>
         </div>
