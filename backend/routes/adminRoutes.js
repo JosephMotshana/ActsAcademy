@@ -24,5 +24,14 @@ router.delete('/student/:id', adminController.removeStudent);
 // Apply the gatekeeper to specific routes
 router.post('/classroom', isAdmin, adminController.createClassroom);
 router.delete('/lecturer/:id', isAdmin, adminController.removeStudent);
+router.post('/update-live-link', adminController.updateLiveLink);
+router.post('/verify-member', adminController.verifyClassroomMember);
+router.get('/classroom/:id', adminController.getClassroomDetails);
+router.get('/student-classes/:studentId', adminController.getStudentClasses);
+// Check line 27 specifically. It probably looks like one of these:
+router.post('/update-live-link', adminController.updateLiveLink);
+router.post('/verify-member', adminController.verifyClassroomMember);
+// This connects the frontend POST request to the Controller function
+router.post('/create-classroom', adminController.createClassroom);
 
 module.exports = router;

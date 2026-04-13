@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { Link } from 'react-router-dom';
 
 const LecturerDashboard = ({ lecturerId }) => {
     const [myClasses, setMyClasses] = useState([]);
@@ -11,7 +12,6 @@ const LecturerDashboard = ({ lecturerId }) => {
     }, []);
 
     const fetchClasses = async () => {
-        // For now, we manually pass a lecturerId until login is ready
         const res = await axios.get(`http://localhost:5000/api/admin/my-classes/${lecturerId}`);
         setMyClasses(res.data);
     };
@@ -24,9 +24,7 @@ const LecturerDashboard = ({ lecturerId }) => {
 
     const removeStudentFromClass = async (studentId) => {
         if (window.confirm("Remove student from this class?")) {
-            // This hits your existing delete student route
             await axios.delete(`http://localhost:5000/api/admin/student/${studentId}`);
-            // Refresh the student list for this class
             const classObj = myClasses.find(c => c.classroomname === selectedClass);
             viewStudents(classObj.id, selectedClass);
         }
@@ -37,16 +35,22 @@ const LecturerDashboard = ({ lecturerId }) => {
             <h1>Lecturer Portal</h1>
             <div style={{ display: 'flex', gap: '40px' }}>
                 
-                {/* Section 1: My assigned classes */}
                 <div style={{ flex: 1 }}>
                     <h3>My Assigned Classes</h3>
                     {myClasses.length > 0 ? (
                         <ul>
                             {myClasses.map(c => (
                                 <li key={c.id} style={{ marginBottom: '10px' }}>
-                                    {c.classroomname} 
+                                    {/* STEP 2: WRAP THE NAME IN A LINK */}
+                                    <Link 
+                                        to={`/classroom/${c.id}`} 
+                                        style={{ textDecoration: 'none', color: '#2196f3', fontWeight: 'bold' }}
+                                    >
+                                        {c.classroomname}
+                                    </Link>
+                                    
                                     <button onClick={() => viewStudents(c.id, c.classroomname)} style={{ marginLeft: '10px' }}>
-                                        View Students
+                                        Manage Students
                                     </button>
                                 </li>
                             ))}
@@ -54,7 +58,6 @@ const LecturerDashboard = ({ lecturerId }) => {
                     ) : <p>No classes assigned yet.</p>}
                 </div>
 
-                {/* Section 2: Students in selected class */}
                 <div style={{ flex: 1, borderLeft: '1px solid #ccc', paddingLeft: '20px' }}>
                     {selectedClass ? (
                         <>
@@ -73,7 +76,7 @@ const LecturerDashboard = ({ lecturerId }) => {
                                 ))}
                             </ul>
                         </>
-                    ) : <p>Select a class to manage students.</p>}
+                    ) : <p>Select "Manage Students" to see the class list.</p>}
                 </div>
             </div>
         </div>
