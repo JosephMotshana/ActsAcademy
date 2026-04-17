@@ -30,6 +30,15 @@ exports.getAllLecturers = async (req, res) => {
         res.status(500).json({ error: err.message });
     }
 };
+exports.reassignLecturer = async (req, res) => {
+    const { classroomId, lecturerId } = req.body;
+    try {
+        await db.query('UPDATE classrooms SET lecturer_id = ? WHERE id = ?', [lecturerId, classroomId]);
+        res.json({ message: "Lecturer reassigned successfully!" });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+};
 // CREATE A CLASSROOM
 exports.createClassroom = async (req, res) => {
     const { classroomname, lecturer_id } = req.body;

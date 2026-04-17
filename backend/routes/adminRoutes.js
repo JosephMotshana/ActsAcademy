@@ -33,5 +33,6 @@ router.post('/update-live-link', adminController.updateLiveLink);
 router.post('/verify-member', adminController.verifyClassroomMember);
 // This connects the frontend POST request to the Controller function
 router.post('/create-classroom', adminController.createClassroom);
+router.post('/reassign-lecturer', adminController.reassignLecturer);
 
 module.exports = router;
