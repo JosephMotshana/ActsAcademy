@@ -1,83 +1,46 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const LecturerDashboard = ({ lecturerId }) => {
     const [myClasses, setMyClasses] = useState([]);
-    const [selectedClass, setSelectedClass] = useState(null);
-    const [students, setStudents] = useState([]);
+    const navigate = useNavigate();
 
     useEffect(() => {
+        const fetchClasses = async () => {
+            try {
+                const res = await axios.get(`http://localhost:5000/api/lecturer/my-classes/${lecturerId}`);
+                setMyClasses(res.data);
+            } catch (err) {
+                console.error("Error loading classes", err);
+            }
+        };
         fetchClasses();
-    }, []);
-
-    const fetchClasses = async () => {
-        const res = await axios.get(`http://localhost:5000/api/admin/my-classes/${lecturerId}`);
-        setMyClasses(res.data);
-    };
-
-    const viewStudents = async (classId, className) => {
-        const res = await axios.get(`http://localhost:5000/api/admin/class-students/${classId}`);
-        setStudents(res.data);
-        setSelectedClass(className);
-    };
-
-    const removeStudentFromClass = async (studentId) => {
-        if (window.confirm("Remove student from this class?")) {
-            await axios.delete(`http://localhost:5000/api/admin/student/${studentId}`);
-            const classObj = myClasses.find(c => c.classroomname === selectedClass);
-            viewStudents(classObj.id, selectedClass);
-        }
-    };
+    }, [lecturerId]);
 
     return (
-        <div style={{ padding: '20px', fontFamily: 'Arial' }}>
-            <h1>Lecturer Portal</h1>
-            <div style={{ display: 'flex', gap: '40px' }}>
-                
-                <div style={{ flex: 1 }}>
-                    <h3>My Assigned Classes</h3>
-                    {myClasses.length > 0 ? (
-                        <ul>
-                            {myClasses.map(c => (
-                                <li key={c.id} style={{ marginBottom: '10px' }}>
-                                    {/* STEP 2: WRAP THE NAME IN A LINK */}
-                                    <Link 
-                                        to={`/classroom/${c.id}`} 
-                                        style={{ textDecoration: 'none', color: '#2196f3', fontWeight: 'bold' }}
-                                    >
-                                        {c.classroomname}
-                                    </Link>
-                                    
-                                    <button onClick={() => viewStudents(c.id, c.classroomname)} style={{ marginLeft: '10px' }}>
-                                        Manage Students
-                                    </button>
-                                </li>
-                            ))}
-                        </ul>
-                    ) : <p>No classes assigned yet.</p>}
-                </div>
-
-                <div style={{ flex: 1, borderLeft: '1px solid #ccc', paddingLeft: '20px' }}>
-                    {selectedClass ? (
-                        <>
-                            <h3>Students in {selectedClass}</h3>
-                            <ul>
-                                {students.map(s => (
-                                    <li key={s.id} style={{ marginBottom: '10px' }}>
-                                        {s.username} ({s.email})
-                                        <button 
-                                            onClick={() => removeStudentFromClass(s.id)} 
-                                            style={{ marginLeft: '10px', color: 'red' }}
-                                        >
-                                            Remove Student
-                                        </button>
-                                    </li>
-                                ))}
-                            </ul>
-                        </>
-                    ) : <p>Select "Manage Students" to see the class list.</p>}
-                </div>
+        <div style={{ padding: '40px', backgroundColor: '#f8f9fa', minHeight: '100vh' }}>
+            <h1 style={{ marginBottom: '10px' }}>Dashboard</h1>
+            <p style={{ color: '#666', marginBottom: '30px' }}>Select a class to manage content and students.</p>
+            
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '25px' }}>
+                {myClasses.map(cls => (
+                    <div 
+                        key={cls.id} 
+                        onClick={() => navigate(`/lecturer/class/${cls.id}/materials`)}
+                        style={{ 
+                            backgroundColor: 'white', padding: '25px', borderRadius: '15px', 
+                            boxShadow: '0 4px 6px rgba(0,0,0,0.05)', cursor: 'pointer',
+                            transition: 'transform 0.2s', border: '1px solid #eee'
+                        }}
+                        onMouseOver={(e) => e.currentTarget.style.transform = 'translateY(-5px)'}
+                        onMouseOut={(e) => e.currentTarget.style.transform = 'translateY(0)'}
+                    >
+                        <div style={{ fontSize: '40px', marginBottom: '10px' }}>📘</div>
+                        <h3 style={{ margin: '0', color: '#2c3e50' }}>{cls.classroomname}</h3>
+                        <p style={{ color: '#999', fontSize: '14px' }}>Class ID: #{cls.id}</p>
+                    </div>
+                ))}
             </div>
         </div>
     );
