@@ -1,6 +1,6 @@
 const express = require('express');
 const cors = require('cors');
-const path = require('path');
+const path = require('path'); // Declared ONCE at the top
 require('dotenv').config();
 const db = require('./config/db');
 
@@ -18,6 +18,7 @@ app.use(express.json());
 
 // --- Static Files (For Downloads/Materials) ---
 // This allows the browser to access files in the 'uploads' folder
+// We only need this line once.
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // --- Routes ---

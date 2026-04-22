@@ -21,32 +21,27 @@ exports.updateLiveLink = async (req, res) => {
     }
 };
 
-// --- MATERIALS ---
-exports.getMaterials = async (req, res) => {
-    const { classId } = req.params;
+exports.addMaterial = async (req, res) => {
+    const { title, type, classId, link } = req.body;
+    const fileData = req.file ? `/uploads/${req.file.filename}` : link;
+
     try {
-        const [materials] = await db.query('SELECT * FROM materials WHERE classroom_id = ?', [classId]);
-        res.json(materials);
+        const query = "INSERT INTO materials (title, type, classroom_id, file_url) VALUES (?, ?, ?, ?)";
+        await db.query(query, [title, type, classId, fileData]);
+        res.status(201).json({ message: "Material added successfully" });
     } catch (err) {
+        console.error("Database Error:", err);
         res.status(500).json({ error: err.message });
     }
 };
 
-exports.addMaterial = async (req, res) => {
-    const { title, type, classId, link } = req.body; 
-    let finalPath = link; 
-
-    // Because of lecturerRoutes.js, req.file is already processed and available here
-    if (req.file) {
-        finalPath = `http://localhost:5000/uploads/${req.file.filename}`;
-    }
-
+// --- GET MATERIALS (Updated to Async/Await) ---
+exports.getMaterials = async (req, res) => {
+    const { classId } = req.params;
     try {
-        await db.query(
-            'INSERT INTO materials (classroom_id, title, type, file_path) VALUES (?, ?, ?, ?)',
-            [classId, title, type, finalPath]
-        );
-        res.json({ message: "Material uploaded!" });
+        const query = "SELECT * FROM materials WHERE classroom_id = ?";
+        const [results] = await db.query(query, [classId]);
+        res.json(results);
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
