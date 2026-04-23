@@ -13,7 +13,8 @@ import ClassroomManager from './pages/ClassroomManager';
 import StudyMaterials from './pages/StudyMaterials';
 import CreateTest from './pages/CreateTest';
 import LiveClass from './pages/LiveClass';
-import StudentProgress from './pages/StudentProgress';
+import PerformancePage from './pages/PerformancePage';
+import MarkAssessment from './pages/MarkAssessment';
 
 // Student Pages
 import StudentDashboard from './pages/StudentDashboard';
@@ -61,13 +62,15 @@ function App() {
                 {/* 5. LECTURER ROUTES (Nested Moodle Structure) */}
                 <Route path="/lecturer" element={user?.role === 'LECTURER' ? <LecturerDashboard lecturerId={user.id} /> : <Navigate to="/" />} />
                 
+                {/* 5. LECTURER ROUTES */}
                 <Route path="/lecturer/class/:classId" element={user?.role === 'LECTURER' ? <ClassroomManager /> : <Navigate to="/" />}>
-                    <Route path="materials" element={<StudyMaterials />} />
-                    <Route path="live" element={<LiveClass />} />
-                    <Route path="create-test" element={<CreateTest />} />
-                    <Route path="progress" element={<StudentProgress />} />
-                </Route>
-
+                        <Route path="materials" element={<StudyMaterials />} />
+                        <Route path="live" element={<LiveClass />} />
+                        <Route path="create-test" element={<CreateTest />} />
+                        <Route path="performance" element={<PerformancePage />} />
+                        <Route path="mark-assessment" element={<MarkAssessment />} />
+                    </Route>
+               
                 {/* 6. STUDENT ROUTES (Nested Moodle Structure) */}
                 <Route path="/student" element={user?.role === 'STUDENT' ? <StudentDashboard studentId={user.id} /> : <Navigate to="/" />} />
                 

@@ -9,7 +9,8 @@ const ClassroomManager = () => {
         { name: 'Study Materials', path: 'materials', icon: '📚' },
         { name: 'Live Classes', path: 'live', icon: '🎥' },
         { name: 'Create Test', path: 'create-test', icon: '📝' },
-        { name: 'Student Progress', path: 'progress', icon: '📊' },
+        { name: 'Performance', path: 'performance', icon: '📈' },
+        {name: 'Mark Assessments', path: 'mark-assessment', icon: '✅' }
     ];
 
     return (

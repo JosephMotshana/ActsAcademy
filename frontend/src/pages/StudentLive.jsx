@@ -1,32 +1,40 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
+import axios from 'axios';
 
-const StudentLive = ({ user }) => {
+const StudentLive = () => {
     const { classId } = useParams();
-    const roomName = `ActsAcademy_Room_${classId}`;
+    const [session, setSession] = useState(null);
 
     useEffect(() => {
-        const domain = "meet.jit.si";
-        const options = {
-            roomName: roomName,
-            width: "100%",
-            height: 600,
-            parentNode: document.querySelector('#student-meet'),
-            userInfo: {
-                displayName: user?.username || "Student"
-            },
-            interfaceConfigOverwrite: {
-                TOOLBAR_BUTTONS: ['microphone', 'camera', 'chat', 'raisehand', 'tileview'],
-            }
+        const fetchSession = async () => {
+            const res = await axios.get(`http://localhost:5000/api/student/live-link/${classId}`);
+            setSession(res.data);
         };
-        const api = new window.JitsiMeetExternalAPI(domain, options);
-        return () => api.dispose();
-    }, [roomName, user?.username]);
+        fetchSession();
+    }, [classId]);
 
     return (
-        <div>
-            <h2>🎥 Join Live Class</h2>
-            <div id="student-meet" style={{ borderRadius: '10px', overflow: 'hidden' }}></div>
+        <div style={{ textAlign: 'center', padding: '50px' }}>
+            <h2>🎥 Live Lesson Hall</h2>
+            
+            {session?.live_link ? (
+                <div style={{ backgroundColor: '#f0f4ff', padding: '30px', borderRadius: '15px', border: '2px dashed #1a237e' }}>
+                    <p style={{ fontSize: '1.2rem', marginBottom: '10px' }}>
+                        <strong>Next Class:</strong> {session.scheduled_time ? new Date(session.scheduled_time).toLocaleString() : 'Now'}
+                    </p>
+                    <a 
+                        href={session.live_link} 
+                        target="_blank" 
+                        rel="noreferrer" 
+                        style={{ display: 'inline-block', padding: '15px 40px', backgroundColor: '#4caf50', color: 'white', borderRadius: '30px', textDecoration: 'none', fontWeight: 'bold' }}
+                    >
+                        Join Meeting
+                    </a>
+                </div>
+            ) : (
+                <p style={{ color: '#888' }}>No classes scheduled at the moment.</p>
+            )}
         </div>
     );
 };

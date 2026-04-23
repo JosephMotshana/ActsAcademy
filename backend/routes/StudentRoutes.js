@@ -27,6 +27,7 @@ router.get('/quiz/:quizId', studentController.getQuizDetails);
 
 // Submit the quiz (Auto-marking results saved here)
 router.post('/submit-quiz', studentController.submitQuiz);
-
+// Add this to your student routes file
+router.get('/live-link/:classId', studentController.getLiveLink);
 
 module.exports = router;

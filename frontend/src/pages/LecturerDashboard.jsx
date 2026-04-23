@@ -22,9 +22,10 @@ const LecturerDashboard = ({ lecturerId }) => {
         <div style={{ padding: '40px', backgroundColor: '#f8f9fa', minHeight: '100vh' }}>
             <h1 style={{ marginBottom: '10px' }}>Dashboard</h1>
             <p style={{ color: '#666', marginBottom: '30px' }}>Select a class to manage content and students.</p>
-            
+                
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '25px' }}>
                 {myClasses.map(cls => (
+                    
                     <div 
                         key={cls.id} 
                         onClick={() => navigate(`/lecturer/class/${cls.id}/materials`)}
@@ -43,6 +44,7 @@ const LecturerDashboard = ({ lecturerId }) => {
                 ))}
             </div>
         </div>
+        
     );
 };
 

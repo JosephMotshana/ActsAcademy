@@ -36,5 +36,16 @@ router.delete('/material/:id', lecturerController.deleteMaterial);
 // --- QUIZ & PERFORMANCE ---
 router.post('/create-quiz', lecturerController.createQuiz);
 router.get('/performance/:classId', lecturerController.getStudentPerformance);
+// Add these to your existing lecturer routes
+router.post('/update-live-link', lecturerController.updateLiveLink);
+router.get('/live-link/:classId', lecturerController.getLiveLink);
+router.post('/update-live-link', lecturerController.updateLiveLink);
+router.get('/live-status/:classId', lecturerController.getLiveStatus);
+// Route to get essay answers that need marking
+router.get('/pending-marks/:classId', lecturerController.getPendingMarks);
+
+// Route to save the score you give
+router.post('/submit-mark', lecturerController.submitMark);
+
 
 module.exports = router;

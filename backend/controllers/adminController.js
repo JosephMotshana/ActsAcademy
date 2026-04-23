@@ -1,6 +1,16 @@
 const db = require('../config/db');
 
-// Function to delete a lecturer
+// --- LECTURER MANAGEMENT ---
+
+exports.getAllLecturers = async (req, res) => {
+    try {
+        const [rows] = await db.query('SELECT id, username, email FROM users WHERE role = "LECTURER"');
+        res.json(rows);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+};
+
 exports.removeLecturer = async (req, res) => {
     const { id } = req.params;
     try {
@@ -11,25 +21,6 @@ exports.removeLecturer = async (req, res) => {
     }
 };
 
-// Function to unenroll a student
-exports.unenrollStudent = async (req, res) => {
-    const { studentId, classroomId } = req.body;
-    try {
-        await db.query('DELETE FROM enrollments WHERE student_id = ? AND classroom_id = ?', [studentId, classroomId]);
-        res.json({ message: "Student removed from this specific class." });
-    } catch (err) {
-        res.status(500).json({ error: err.message });
-    }
-};
-// GET ALL LECTURERS
-exports.getAllLecturers = async (req, res) => {
-    try {
-        const [rows] = await db.query('SELECT id, username, email FROM users WHERE role = "LECTURER"');
-        res.json(rows);
-    } catch (err) {
-        res.status(500).json({ error: err.message });
-    }
-};
 exports.reassignLecturer = async (req, res) => {
     const { classroomId, lecturerId } = req.body;
     try {
@@ -39,7 +30,54 @@ exports.reassignLecturer = async (req, res) => {
         res.status(500).json({ error: err.message });
     }
 };
-// CREATE A CLASSROOM
+
+// --- STUDENT MANAGEMENT ---
+
+exports.getAllStudents = async (req, res) => {
+    try {
+        const [rows] = await db.query('SELECT id, username, email FROM users WHERE role = "STUDENT"');
+        res.json(rows);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+};
+
+exports.removeStudent = async (req, res) => {
+    const { id } = req.params;
+    try {
+        // Automatically clears enrollments due to SQL CASCADE
+        await db.query('DELETE FROM users WHERE id = ? AND role = "STUDENT"', [id]);
+        res.json({ message: "Student removed successfully." });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+};
+
+// --- CLASSROOM MANAGEMENT ---
+
+exports.getAllClassrooms = async (req, res) => {
+    try {
+        const [rows] = await db.query(`
+            SELECT c.id, c.classroomname, u.username AS lecturer_name 
+            FROM classrooms c 
+            LEFT JOIN users u ON c.lecturer_id = u.id
+        `);
+        res.json(rows);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+};
+
+exports.getClassroomDetails = async (req, res) => {
+    const { id } = req.params;
+    try {
+        const [rows] = await db.query('SELECT * FROM classrooms WHERE id = ?', [id]);
+        res.json(rows[0]);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+};
+
 exports.createClassroom = async (req, res) => {
     const { classroomname, lecturer_id } = req.body;
     try {
@@ -52,69 +90,17 @@ exports.createClassroom = async (req, res) => {
         res.status(500).json({ error: err.message });
     }
 };
-exports.getAllClassrooms = async (req, res) => {
-    try {
-        // We use a LEFT JOIN to see classrooms even if they have no lecturer (NULL)
-        const [rows] = await db.query(`
-            SELECT c.id, c.classroomname, u.username AS lecturer_name 
-            FROM classrooms c 
-            LEFT JOIN users u ON c.lecturer_id = u.id
-        `);
-        res.json(rows);
-    } catch (err) {
-        res.status(500).json({ error: err.message });
-    }
-};
-// DELETE A CLASSROOM
+
 exports.removeClassroom = async (req, res) => {
     const { id } = req.params;
     try {
         await db.query('DELETE FROM classrooms WHERE id = ?', [id]);
-        res.json({ message: "Classroom deleted successfully. All student enrollments for this class have been removed." });
+        res.json({ message: "Classroom deleted successfully." });
     } catch (err) {
         res.status(500).json({ error: err.message });
-    }
-};
-// ENROLL A STUDENT
-exports.enrollStudent = async (req, res) => {
-    const { student_id, classroom_id } = req.body;
-    try {
-        await db.query(
-            'INSERT INTO enrollments (student_id, classroom_id) VALUES (?, ?)',
-            [student_id, classroom_id]
-        );
-        res.status(201).json({ message: "Student enrolled successfully!" });
-    } catch (err) {
-        res.status(500).json({ error: "Enrollment failed. Maybe student is already enrolled?" });
     }
 };
 
-exports.getAllStudents = async (req, res) => {
-    try {
-        // We select from 'users' table, not a 'students' table
-        const [rows] = await db.query(
-            'SELECT id, username, email FROM users WHERE role = "STUDENT"'
-        );
-        res.json(rows);
-    } catch (err) {
-        console.error("Database Error:", err.message); // This sends the error to your terminal
-        res.status(500).json({ error: err.message });
-    }
-};
-// DELETE A STUDENT
-exports.removeStudent = async (req, res) => {
-    const { id } = req.params;
-    try {
-        // This will remove the student from 'users' and 
-        // automatically clear their enrollments due to CASCADE.
-        await db.query('DELETE FROM users WHERE id = ? AND role = "STUDENT"', [id]);
-        res.json({ message: "Student removed successfully." });
-    } catch (err) {
-        res.status(500).json({ error: err.message });
-    }
-}; // <--- THIS BRACE WAS MISSING
-
-// Update the Live Meeting Link
 exports.updateLiveLink = async (req, res) => {
     const { classroomId, liveLink } = req.body;
     try {
@@ -125,42 +111,48 @@ exports.updateLiveLink = async (req, res) => {
     }
 };
 
-// The Security Bouncer: Checks if Student/Lecturer belongs to this class
-exports.verifyClassroomMember = async (req, res) => {
-    const { classroomId, userId, role } = req.body;
+// --- ENROLLMENT MANAGEMENT ---
+
+exports.enrollStudent = async (req, res) => {
+    const { studentId, classroomId } = req.body;
     try {
-        if (role === 'LECTURER') {
-            const [rows] = await db.query(
-                'SELECT id FROM classrooms WHERE id = ? AND lecturer_id = ?', 
-                [classroomId, userId]
-            );
-            return res.json({ authorized: rows.length > 0 });
-        } 
-        if (role === 'STUDENT') {
-            const [rows] = await db.query(
-                'SELECT id FROM enrollments WHERE classroom_id = ? AND student_id = ?', 
-                [classroomId, userId]
-            );
-            return res.json({ authorized: rows.length > 0 });
+        // 1. Check if enrollment already exists
+        const [existing] = await db.query(
+            'SELECT * FROM enrollments WHERE student_id = ? AND classroom_id = ?',
+            [studentId, classroomId]
+        );
+
+        if (existing.length > 0) {
+            return res.status(400).json({ message: "Student is already enrolled." });
         }
-        res.status(403).json({ authorized: false });
+
+        // 2. Proceed with enrollment
+        await db.query(
+            'INSERT INTO enrollments (student_id, classroom_id) VALUES (?, ?)',
+            [studentId, classroomId]
+        );
+        res.status(201).json({ message: "Student enrolled successfully!" });
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
 };
 
-// Get specific classroom details
-exports.getClassroomDetails = async (req, res) => {
-    const { id } = req.params;
+exports.unenrollStudent = async (req, res) => {
+    // Handling both body and params logic for flexibility
+    const studentId = req.params.studentId || req.body.studentId;
+    const classroomId = req.params.classroomId || req.body.classroomId;
+    
     try {
-        const [rows] = await db.query('SELECT * FROM classrooms WHERE id = ?', [id]);
-        res.json(rows[0]);
+        await db.query(
+            'DELETE FROM enrollments WHERE student_id = ? AND classroom_id = ?',
+            [studentId, classroomId]
+        );
+        res.json({ message: "Student removed from class" });
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
 };
 
-// GET CLASSES A STUDENT IS ENROLLED IN
 exports.getStudentClasses = async (req, res) => {
     const { studentId } = req.params;
     try {
@@ -171,6 +163,25 @@ exports.getStudentClasses = async (req, res) => {
             WHERE e.student_id = ?`, 
             [studentId]
         );
+        res.json(rows);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+};
+// GET ALL ENROLLMENTS (Who is in what class)
+exports.getEnrollmentList = async (req, res) => {
+    try {
+        const [rows] = await db.query(`
+            SELECT 
+                e.student_id, 
+                e.classroom_id, 
+                u.username AS student_name, 
+                c.classroomname AS class_name
+            FROM enrollments e
+            JOIN users u ON e.student_id = u.id
+            JOIN classrooms c ON e.classroom_id = c.id
+            ORDER BY c.classroomname ASC
+        `);
         res.json(rows);
     } catch (err) {
         res.status(500).json({ error: err.message });

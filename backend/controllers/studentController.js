@@ -115,3 +115,40 @@ exports.getMyEnrolledClasses = async (req, res) => {
         WHERE e.student_id = ?`;
     // ... execute query
 };
+
+exports.getLiveLink = async (req, res) => {
+    const { classId } = req.params;
+    try {
+        // This query is the heart of the 12-hour expiry logic
+        const query = `
+            SELECT live_link FROM classrooms 
+            WHERE id = ? 
+            AND link_updated_at >= NOW() - INTERVAL 12 HOUR
+        `;
+        const [rows] = await db.query(query, [classId]);
+
+        if (rows.length > 0) {
+            res.json({ live_link: rows[0].live_link });
+        } else {
+            // If the link is old or empty, we return null so the button disappears
+            res.json({ live_link: null });
+        }
+    } catch (err) {
+        console.error("Error fetching live link for student:", err);
+        res.status(500).json({ error: "Server error" });
+    }
+};
+exports.getEnrolledClasses = async (req, res) => {
+    const { studentId } = req.params;
+    try {
+        const [rows] = await db.query(
+            `SELECT c.* FROM classrooms c 
+             JOIN enrollments e ON c.id = e.classroom_id 
+             WHERE e.student_id = ?`, 
+            [studentId]
+        );
+        res.json(rows);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+};
