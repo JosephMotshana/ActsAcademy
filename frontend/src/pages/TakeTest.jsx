@@ -2,92 +2,81 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useParams, useNavigate } from 'react-router-dom';
 
-const TakeTest = ({ studentId }) => {
-    const { quizId } = useParams();
-    const [quiz, setQuiz] = useState(null);
-    const [answers, setAnswers] = useState({});
+const TakeTest = ({ user }) => {
+    const { testId } = useParams();
     const navigate = useNavigate();
+    const [testInfo, setTestInfo] = useState(null);
+    const [answers, setAnswers] = useState({}); // Stores { questionId: answerValue }
 
     useEffect(() => {
-        const fetchQuiz = async () => {
-            const res = await axios.get(`http://localhost:5000/api/student/quiz/${quizId}`);
-            setQuiz(res.data);
+        const fetchTest = async () => {
+            const res = await axios.get(`http://localhost:5000/api/student/test-details/${testId}`);
+            setTestInfo(res.data);
         };
-        fetchQuiz();
-    }, [quizId]);
+        fetchTest();
+    }, [testId]);
+
+    const handleInputChange = (questionId, value) => {
+        setAnswers({ ...answers, [questionId]: value });
+    };
 
     const handleSubmit = async () => {
-        let correctCount = 0;
-        quiz.questions.forEach(q => {
-            if (answers[q.id] === q.correct_option) {
-                correctCount++;
-            }
-        });
-
-        const percentage = (correctCount / quiz.questions.length) * 100;
-
         try {
-            await axios.post('http://localhost:5000/api/student/submit-quiz', {
-                quizId,
-                studentId,
-                score: percentage
+            await axios.post(`http://localhost:5000/api/student/submit-test`, {
+                userId: user.id,
+                testId: testId,
+                answers: answers // Example: { 1: 'A', 2: 'My essay answer...' }
             });
-            alert(`Test Submitted! Your score: ${percentage.toFixed(1)}%`);
-            navigate(-1); // Go back to tests list
+            alert("Test submitted successfully!");
+            navigate(-1); // Go back to available tests
         } catch (err) {
             alert("Error submitting test");
         }
     };
 
-    if (!quiz) return <p>Loading test...</p>;
+    if (!testInfo) return <p>Loading test...</p>;
 
     return (
-        <div style={{ maxWidth: '800px', margin: '0 auto', padding: '20px', backgroundColor: 'white', borderRadius: '10px' }}>
-            <h2>{quiz.title}</h2>
+        <div style={{ padding: '30px', maxWidth: '800px', margin: '0 auto' }}>
+            <h2 style={{ color: '#1a237e' }}>{testInfo.title}</h2>
             <hr />
-            {quiz.questions.map((q, idx) => (
-                <div key={q.id} style={{ marginBottom: '25px', padding: '15px', borderBottom: '1px solid #eee' }}>
-                    <p><strong>Q{idx + 1}: {q.question_text}</strong></p>
-                    {['A', 'B', 'C', 'D'].map(opt => (
-                        <label key={opt} style={{ display: 'block', margin: '10px 0', cursor: 'pointer' }}>
-                            <input 
-                                type="radio" 
-                                name={`q${q.id}`} 
-                                value={opt} 
-                                onChange={() => setAnswers({...answers, [q.id]: opt})}
-                            />
-                            {opt}: {q[`option_${opt.toLowerCase()}`]}
-                        </label>
-                    ))}
+            
+            {testInfo.questions.map((q, index) => (
+                <div key={q.id} style={{ marginBottom: '40px', padding: '20px', borderBottom: '1px solid #eee' }}>
+                    <p style={{ fontSize: '1.2rem' }}><strong>Q{index + 1}:</strong> {q.question_text}</p>
+                    
+                    {q.type === 'MCQ' ? (
+                        <div style={{ display: 'grid', gap: '10px', marginTop: '10px' }}>
+                            {['a', 'b', 'c', 'd'].map(opt => (
+                                <label key={opt} style={{ padding: '10px', background: '#f5f5f5', borderRadius: '5px', cursor: 'pointer' }}>
+                                    <input 
+                                        type="radio" 
+                                        name={`q${q.id}`} 
+                                        value={opt.toUpperCase()} 
+                                        onChange={(e) => handleInputChange(q.id, e.target.value)}
+                                    />
+                                    <span style={{ marginLeft: '10px' }}>{q[`option_${opt}`]}</span>
+                                </label>
+                            ))}
+                        </div>
+                    ) : (
+                        <textarea 
+                            style={{ width: '100%', height: '150px', padding: '10px', marginTop: '10px', borderRadius: '5px' }}
+                            placeholder="Type your answer here..."
+                            onChange={(e) => handleInputChange(q.id, e.target.value)}
+                        />
+                    )}
                 </div>
             ))}
-            <button onClick={handleSubmit} style={{ padding: '15px 30px', backgroundColor: '#2e7d32', color: 'white', border: 'none', borderRadius: '8px', width: '100%', fontWeight: 'bold' }}>
-                Submit Test
+
+            <button 
+                onClick={handleSubmit}
+                style={{ width: '100%', padding: '15px', backgroundColor: '#2e7d32', color: 'white', border: 'none', borderRadius: '8px', fontWeight: 'bold', cursor: 'pointer' }}
+            >
+                Submit All Answers
             </button>
         </div>
     );
-};
-// Inside handleSubmit in TakeTest.jsx
-const handleSubmit = async () => {
-    let details = quiz.questions.map(q => ({
-        question_id: q.id,
-        selected_option: answers[q.id] || null,
-        is_correct: answers[q.id] === q.correct_option
-    }));
-
-    const correctCount = details.filter(d => d.is_correct).length;
-    const percentage = (correctCount / quiz.questions.length) * 100;
-
-    try {
-        await axios.post('http://localhost:5000/api/student/submit-quiz', {
-            quizId,
-            studentId,
-            score: percentage,
-            answerDetails: details // Send the breakdown to the backend
-        });
-        alert("Test Submitted!");
-        navigate(-1);
-    } catch (err) { alert("Error submitting"); }
 };
 
 export default TakeTest;

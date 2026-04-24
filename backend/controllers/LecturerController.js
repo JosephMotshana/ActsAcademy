@@ -50,23 +50,40 @@ exports.deleteMaterial = async (req, res) => {
 
 // --- QUIZZES & PERFORMANCE ---
 exports.createQuiz = async (req, res) => {
-    const { classId, title, questions } = req.body;
+    const { classId } = req.params;
+    const { title, questions } = req.body;
+
     try {
-        const [result] = await db.query('INSERT INTO quizzes (class_id, title) VALUES (?, ?)', [classId, title]);
-        const quizId = result.insertId;
-
-        const questionValues = questions.map(q => [
-            quizId, q.question_text, q.type, q.option_a, q.option_b, q.option_c, q.option_d, q.correct_option
-        ]);
-
-        await db.query(
-            'INSERT INTO questions (quiz_id, question_text, question_type, option_a, option_b, option_c, option_d, correct_option) VALUES ?',
-            [questionValues]
+        // 1. Insert the Quiz Header
+        const [quizResult] = await db.query(
+            `INSERT INTO quizzes (classroom_id, title) VALUES (?, ?)`,
+            [classId, title]
         );
+        const quizId = quizResult.insertId;
 
-        res.status(201).json({ message: "Assessment created!" });
+        // 2. Insert the Questions
+        for (let q of questions) {
+            await db.query(
+                `INSERT INTO questions 
+                (quiz_id, question_text, question_type, option_a, option_b, option_c, option_d, correct_option) 
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+                [
+                    quizId, 
+                    q.question_text, 
+                    q.question_type, 
+                    q.option_a || null, 
+                    q.option_b || null, 
+                    q.option_c || null, 
+                    q.option_d || null, 
+                    q.correct_option || null
+                ]
+            );
+        }
+
+        res.status(201).json({ message: "Assessment created successfully!", quizId });
     } catch (err) {
-        res.status(500).json({ error: err.message });
+        console.error(err);
+        res.status(500).json({ error: "Database error while creating quiz" });
     }
 };
 
@@ -89,29 +106,33 @@ exports.markStudentAnswer = async (req, res) => {
     }
 };
 
-exports.getStudentPerformance = async (req, res) => {
+exports.getPerformance = async (req, res) => {
     const { classId } = req.params;
+
+    // We use score_percentage here. 
+    // We calculate total possible points as: (Number of Quizzes in class) * 100
+    const query = `
+        SELECT 
+            u.id AS student_id, 
+            u.username AS student_name,
+            COUNT(qr.id) AS quizzes_completed,
+            IFNULL(SUM(qr.score_percentage), 0) AS total_points_earned,
+            (SELECT COUNT(*) * 100 FROM quizzes WHERE classroom_id = ?) AS total_possible_points
+        FROM users u
+        INNER JOIN enrollments e ON u.id = e.student_id
+        LEFT JOIN quiz_results qr ON u.id = qr.student_id 
+            AND qr.quiz_id IN (SELECT id FROM quizzes WHERE classroom_id = ?)
+        WHERE e.classroom_id = ?
+        GROUP BY u.id, u.username
+    `;
+
     try {
-        const [performance] = await db.query(`
-            SELECT 
-                u.id AS student_id, 
-                u.username AS student_name, 
-                COUNT(DISTINCT r.id) AS quizzes_completed,
-                SUM(sa.earned_points) AS total_points_earned,
-                (SELECT SUM(max_points) FROM questions q 
-                 JOIN quizzes qz ON q.quiz_id = qz.id 
-                 WHERE qz.classroom_id = ?) AS total_possible_points
-            FROM users u
-            JOIN student_classes sc ON u.id = sc.student_id
-            LEFT JOIN results r ON u.id = r.student_id
-            LEFT JOIN student_answers sa ON r.id = sa.result_id
-            WHERE sc.classroom_id = ?
-            GROUP BY u.id
-        `, [classId, classId]);
-        
-        res.json(performance);
+        // Ensure your 'db' connection is imported at the top of the file
+        const [rows] = await db.query(query, [classId, classId, classId]);
+        res.json(rows);
     } catch (err) {
-        res.status(500).json({ error: err.message });
+        console.error("SQL Error:", err.message);
+        res.status(500).json({ error: "Internal Server Error", details: err.message });
     }
 };
 
@@ -132,32 +153,43 @@ exports.getStudentAttemptDetail = async (req, res) => {
         res.status(500).json({ error: err.message });
     }
 };
-// Fetch essay answers that are not yet marked
 exports.getPendingMarks = async (req, res) => {
     const { classId } = req.params;
+
+    // Based on your screenshot:
+    // 1. Table is 'questions', not 'quiz_questions'
+    // 2. Essay answers are likely in 'student_essay_answers'
+    const query = `
+        SELECT 
+            sea.id, 
+            u.username, 
+            q.question_text, 
+            sea.answer_text 
+        FROM student_essay_answers sea
+        JOIN users u ON sea.student_id = u.id
+        JOIN questions q ON sea.question_id = q.id
+        JOIN quizzes qz ON q.quiz_id = qz.id
+        WHERE qz.classroom_id = ? 
+        AND sea.marks_awarded IS NULL
+    `;
+
     try {
-        const query = `
-            SELECT sea.*, u.username, q.question_text 
-            FROM student_essay_answers sea
-            JOIN users u ON sea.student_id = u.id
-            JOIN questions q ON sea.question_id = q.id
-            JOIN quizzes qz ON sea.quiz_id = qz.id
-            WHERE qz.class_id = ? AND sea.is_marked = FALSE`;
         const [rows] = await db.query(query, [classId]);
         res.json(rows);
     } catch (err) {
-        res.status(500).json({ error: err.message });
+        console.error("PENDING MARKS ERROR:", err.message);
+        res.status(500).json({ error: "Database error", details: err.message });
     }
 };
 
 // Submit the mark for a specific answer
 exports.submitMark = async (req, res) => {
     const { answerId, marks } = req.body;
+    
+    const query = `UPDATE student_essay_answers SET marks_awarded = ? WHERE id = ?`;
+
     try {
-        await db.query(
-            'UPDATE student_essay_answers SET marks_awarded = ?, is_marked = TRUE WHERE id = ?',
-            [marks, answerId]
-        );
+        await db.query(query, [marks, answerId]);
         res.json({ message: "Mark submitted successfully" });
     } catch (err) {
         res.status(500).json({ error: err.message });
@@ -221,6 +253,75 @@ exports.getLiveStatus = async (req, res) => {
             [classId]
         );
         res.json(rows[0] || { live_link: null, scheduled_time: null });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+};
+
+// Get all quizzes for a specific classroom
+exports.getClassroomQuizzes = async (req, res) => {
+    const { classId } = req.params;
+    const query = `SELECT * FROM quizzes WHERE classroom_id = ? ORDER BY created_at DESC`;
+
+    try {
+        const [rows] = await db.query(query, [classId]);
+        res.json(rows);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+};
+
+// Delete a quiz
+exports.deleteQuiz = async (req, res) => {
+    const { quizId } = req.params;
+    // Note: Due to Foreign Key constraints, this will also delete 
+    // questions and results if your DB is set to ON DELETE CASCADE.
+    const query = `DELETE FROM quizzes WHERE id = ?`;
+
+    try {
+        await db.query(query, [quizId]);
+        res.json({ message: "Assessment deleted successfully" });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+};
+exports.getQuizDetails = async (req, res) => {
+    const { quizId } = req.params;
+
+    try {
+        // Fetch Quiz Header
+        const [quiz] = await db.query(`SELECT * FROM quizzes WHERE id = ?`, [quizId]);
+        if (quiz.length === 0) return res.status(404).json({ error: "Quiz not found" });
+
+        // Fetch Questions associated with this quiz
+        const [questions] = await db.query(`SELECT * FROM questions WHERE quiz_id = ?`, [quizId]);
+
+        res.json({ ...quiz[0], questions });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+};
+
+exports.updateQuiz = async (req, res) => {
+    const { quizId } = req.params;
+    const { title, description, questions } = req.body;
+
+    try {
+        // 1. Update Quiz Header
+        await db.query(`UPDATE quizzes SET title = ?, description = ? WHERE id = ?`, [title, description, quizId]);
+
+        // 2. Simplest way to update questions: Delete old ones and insert new ones
+        // (Alternatively, you can loop and update by ID, but this is cleaner for dynamic forms)
+        await db.query(`DELETE FROM questions WHERE quiz_id = ?`, [quizId]);
+
+        for (let q of questions) {
+            await db.query(
+                `INSERT INTO questions (quiz_id, question_text, question_type, correct_answer) VALUES (?, ?, ?, ?)`,
+                [quizId, q.question_text, q.question_type, q.correct_answer]
+            );
+        }
+
+        res.json({ message: "Quiz updated successfully!" });
     } catch (err) {
         res.status(500).json({ error: err.message });
     }

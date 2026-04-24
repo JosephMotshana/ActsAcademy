@@ -20,7 +20,8 @@ app.use(express.json());
 // This allows the browser to access files in the 'uploads' folder
 // We only need this line once.
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
-
+// This tells Express to make the "uploads" folder public
+app.use('/uploads', express.static('uploads'));
 // --- Routes ---
 app.use('/api/auth', authRoutes);
 app.use('/api/admin', adminRoutes);

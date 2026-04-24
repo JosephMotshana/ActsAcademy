@@ -4,30 +4,30 @@ const studentController = require('../controllers/studentController');
 
 // --- DASHBOARD & CLASSROOM ---
 // Get all classes a student is enrolled in
-router.get('/my-classes/:studentId', studentController.getMyEnrolledClasses);
+router.get('/my-classes/:studentId', studentController.getEnrolledClasses); // Updated to match unified controller name
 
-// Get specific classroom details (for the Live Link)
+// Get specific classroom details
 router.get('/class-details/:classId', studentController.getClassroomDetails);
 
-
 // --- CONTENT ---
-// Get study materials (docs, images, videos, links) for a class
 router.get('/materials/:classId', studentController.getMaterials);
 
-
 // --- ASSESSMENTS (Tests) ---
-// List tests the student hasn't taken yet
 router.get('/available-tests/:classId/:studentId', studentController.getAvailableTests);
-
-// List past test results
 router.get('/test-history/:classId/:studentId', studentController.getTestHistory);
 
-// Get the actual questions for a specific quiz
+// Quiz Details (Handles both naming conventions)
 router.get('/quiz/:quizId', studentController.getQuizDetails);
+router.get('/test-details/:testId', studentController.getQuizDetails); 
 
-// Submit the quiz (Auto-marking results saved here)
+// Submission (Handles both naming conventions)
 router.post('/submit-quiz', studentController.submitQuiz);
-// Add this to your student routes file
+router.post('/submit-test', studentController.submitQuiz); 
+
+// --- REVIEW & LIVE ---
 router.get('/live-link/:classId', studentController.getLiveLink);
+
+// FIXED TYPO HERE: Changed .g to .get and removed the trailing 'et'
+router.get('/review/:quizId/:studentId', studentController.getSubmissionReview);
 
 module.exports = router;

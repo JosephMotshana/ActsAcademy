@@ -34,8 +34,9 @@ router.post('/add-material', upload.single('file'), lecturerController.addMateri
 router.delete('/material/:id', lecturerController.deleteMaterial);
 
 // --- QUIZ & PERFORMANCE ---
-router.post('/create-quiz', lecturerController.createQuiz);
-router.get('/performance/:classId', lecturerController.getStudentPerformance);
+
+// Check line 38 in lecturerRoutes.js
+router.get('/performance/:classId', lecturerController.getPerformance);
 // Add these to your existing lecturer routes
 router.post('/update-live-link', lecturerController.updateLiveLink);
 router.get('/live-link/:classId', lecturerController.getLiveLink);
@@ -43,9 +44,12 @@ router.post('/update-live-link', lecturerController.updateLiveLink);
 router.get('/live-status/:classId', lecturerController.getLiveStatus);
 // Route to get essay answers that need marking
 router.get('/pending-marks/:classId', lecturerController.getPendingMarks);
-
+router.get('/classroom/:classId/quizzes', lecturerController.getClassroomQuizzes);
+router.delete('/quiz/:quizId', lecturerController.deleteQuiz);
 // Route to save the score you give
 router.post('/submit-mark', lecturerController.submitMark);
-
+router.get('/performance/:classId', lecturerController.getPerformance);
+// Make sure the ":classId" part is there!
+router.post('/create-quiz/:classId', lecturerController.createQuiz);
 
 module.exports = router;
