@@ -106,36 +106,36 @@ exports.markStudentAnswer = async (req, res) => {
     }
 };
 
+// lecturerController.js - Updated getPerformance
+// In lecturerController.js
 exports.getPerformance = async (req, res) => {
     const { classId } = req.params;
 
-    // We use score_percentage here. 
-    // We calculate total possible points as: (Number of Quizzes in class) * 100
     const query = `
         SELECT 
             u.id AS student_id, 
             u.username AS student_name,
-            COUNT(qr.id) AS quizzes_completed,
-            IFNULL(SUM(qr.score_percentage), 0) AS total_points_earned,
-            (SELECT COUNT(*) * 100 FROM quizzes WHERE classroom_id = ?) AS total_possible_points
+            COUNT(DISTINCT sa.quiz_id) AS quizzes_completed,
+            /* Calculate sum of marks awarded */
+            IFNULL(SUM(sa.is_correct), 0) AS total_points_earned,
+            /* Calculate total possible marks (assuming 10 points per quiz) */
+            (SELECT COUNT(*) * 10 FROM quizzes WHERE classroom_id = ?) AS total_possible_points
         FROM users u
         INNER JOIN enrollments e ON u.id = e.student_id
-        LEFT JOIN quiz_results qr ON u.id = qr.student_id 
-            AND qr.quiz_id IN (SELECT id FROM quizzes WHERE classroom_id = ?)
+        LEFT JOIN student_answers sa ON u.id = sa.student_id 
+            AND sa.quiz_id IN (SELECT id FROM quizzes WHERE classroom_id = ?)
         WHERE e.classroom_id = ?
         GROUP BY u.id, u.username
     `;
 
     try {
-        // Ensure your 'db' connection is imported at the top of the file
         const [rows] = await db.query(query, [classId, classId, classId]);
         res.json(rows);
     } catch (err) {
-        console.error("SQL Error:", err.message);
-        res.status(500).json({ error: "Internal Server Error", details: err.message });
+        console.error("Performance SQL Error:", err);
+        res.status(500).json({ error: "Could not fetch performance data" });
     }
 };
-
 exports.getStudentAttemptDetail = async (req, res) => {
     const { resultId } = req.params;
     try {
@@ -182,17 +182,44 @@ exports.getPendingMarks = async (req, res) => {
     }
 };
 
-// Submit the mark for a specific answer
+// lecturerController.js
+
+// lecturerController.js - Updated submitMark
 exports.submitMark = async (req, res) => {
     const { answerId, marks } = req.body;
-    
-    const query = `UPDATE student_essay_answers SET marks_awarded = ? WHERE id = ?`;
-
     try {
-        await db.query(query, [marks, answerId]);
-        res.json({ message: "Mark submitted successfully" });
+        // Update the individual answer. 
+        // Note: Based on your DB screenshot, we use 'is_correct' to store the marks.
+        const query = `UPDATE student_answers SET is_correct = ? WHERE id = ?`;
+        
+        const [result] = await db.query(query, [marks, answerId]);
+
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ error: "Answer record not found" });
+        }
+
+        res.json({ message: "Mark saved successfully!" });
     } catch (err) {
+        console.error("Submit Mark Error:", err);
         res.status(500).json({ error: err.message });
+    }
+};
+exports.getPendingStudents = async (req, res) => {
+    const { classId } = req.params;
+    try {
+        // This query finds students who have answers where is_correct is still NULL
+        const query = `
+            SELECT DISTINCT u.id AS studentId, u.username AS studentName, COUNT(sa.id) AS pendingCount
+            FROM student_answers sa
+            JOIN users u ON sa.student_id = u.id
+            JOIN quizzes q ON sa.quiz_id = q.id
+            WHERE q.classroom_id = ? AND sa.is_correct IS NULL
+            GROUP BY u.id`;
+        
+        const [rows] = await db.query(query, [classId]);
+        res.json(rows);
+    } catch (err) {
+        res.status(500).json({ error: "Database error fetching pending students" });
     }
 };
 

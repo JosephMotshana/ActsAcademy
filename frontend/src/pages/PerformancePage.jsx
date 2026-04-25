@@ -22,7 +22,7 @@ const PerformancePage = () => {
 
     useEffect(() => {
         fetchPerformance();
-    }, [fetchPerformance]);
+    }, [fetchPerformance, classId]); // Refetch when component mounts or classId changes
 
     if (loading) return <div style={{ padding: '50px', textAlign: 'center' }}><h3>⌛ Loading class data...</h3></div>;
 
@@ -72,9 +72,9 @@ const PerformancePage = () => {
                                             {hasSubmitted ? `${s.quizzes_completed} Submission(s)` : 'No Submissions'}
                                         </span>
                                     </td>
-                                    <td style={{ padding: '15px', fontWeight: '500' }}>
-                                        {s.total_points_earned} / {s.total_possible_points}
-                                    </td>
+                                <td style={{ padding: '15px', fontWeight: '500' }}>
+                                    {Number(s.total_points_earned).toFixed(0)} / {s.total_possible_points}
+                                </td>
                                     <td style={{ padding: '15px', textAlign: 'center' }}>
                                         <button 
                                             disabled={!hasSubmitted}
@@ -89,6 +89,7 @@ const PerformancePage = () => {
                                             {hasSubmitted ? 'Review & Mark' : 'Pending'}
                                         </button>
                                     </td>
+
                                 </tr>
                             );
                         })}

@@ -18,8 +18,8 @@ const StudentDashboard = ({ studentId }) => {
             }
 
             try {
-                // 2. Corrected URL to match your AdminRoutes.js
-                const res = await axios.get(`http://localhost:5000/api/admin/student-classes/${idToUse}`);
+                // 2. Corrected URL to match StudentRoutes.js
+                const res = await axios.get(`http://localhost:5000/api/student/my-classes/${idToUse}`);
                 setEnrolledClasses(res.data);
             } catch (err) {
                 console.error("Error fetching student classes:", err);

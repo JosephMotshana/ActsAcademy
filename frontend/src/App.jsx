@@ -14,8 +14,8 @@ import StudyMaterials from './pages/StudyMaterials';
 import LiveClass from './pages/LiveClass';
 import PerformancePage from './pages/PerformancePage';
 import MarkAssessment from './pages/MarkAssessment';
-import ManageQuizzes from './pages/ManageQuizzes';       // Added Import
-import CreateOrEditQuiz from './pages/CreateOrEditQuiz'; // Added Import
+import ManageQuizzes from './pages/ManageQuizzes';
+import CreateOrEditQuiz from './pages/CreateOrEditQuiz';
 
 // Student Pages
 import StudentDashboard from './pages/StudentDashboard';
@@ -29,21 +29,33 @@ import ReviewTest from './pages/ReviewTest';
 
 function App() {
     const [user, setUser] = useState(null);
+    const [isLoading, setIsLoading] = useState(true);
 
-    // 1. Persist Login State
     useEffect(() => {
         const savedUser = localStorage.getItem('user');
-        if (savedUser) setUser(JSON.parse(savedUser));
+        if (savedUser) {
+            try {
+                setUser(JSON.parse(savedUser));
+            } catch (error) {
+                console.error("Failed to parse user session", error);
+                localStorage.removeItem('user');
+            }
+        }
+        setIsLoading(false);
     }, []);
 
     const handleLogout = () => {
         localStorage.removeItem('user');
+        localStorage.removeItem('userId'); 
         setUser(null);
     };
 
+    if (isLoading) {
+        return <div style={{ display: 'flex', justifyContent: 'center', marginTop: '50px' }}>Loading Portal...</div>;
+    }
+
     return (
         <div>
-            {/* 2. Global Navbar (Only shows when logged in) */}
             {user && (
                 <nav style={{ 
                     padding: '15px 30px', 
@@ -80,28 +92,37 @@ function App() {
             )}
 
             <Routes>
-                {/* 3. Authentication Routing */}
+                {/* 1. AUTH */}
                 <Route path="/" element={!user ? <Login setUser={setUser} /> : <Navigate to={`/${user.role.toLowerCase()}`} />} />
 
-                {/* 4. ADMIN ROUTES */}
+                {/* 2. ADMIN */}
                 <Route path="/admin" element={user?.role === 'ADMIN' ? <AdminDashboard /> : <Navigate to="/" />} />
 
-                {/* 5. LECTURER ROUTES (Dashboard + Nested Classrooms) */}
+                {/* 3. LECTURER */}
                 <Route path="/lecturer" element={user?.role === 'LECTURER' ? <LecturerDashboard lecturerId={user.id} /> : <Navigate to="/" />} />
                 
+                {/* Nested Classroom Routes */}
                 <Route path="/lecturer/class/:classId" element={user?.role === 'LECTURER' ? <ClassroomManager /> : <Navigate to="/" />}>
                     <Route path="materials" element={<StudyMaterials />} />
                     <Route path="live" element={<LiveClass />} />
                     <Route path="performance" element={<PerformancePage />} />
+                    <Route path="manage-quizzes" element={<ManageQuizzes />} />
                     <Route path="mark-assessment" element={<MarkAssessment />} />
-                    <Route path="manage-quizzes" element={<ManageQuizzes />} /> {/* Added Nested Route */}
                 </Route>
 
-                {/* Standalone Lecturer Assessment Routes */}
-                <Route path="/lecturer/class/:classId/create-quiz" element={<CreateOrEditQuiz />} />
-                <Route path="/lecturer/edit-quiz/:quizId" element={<CreateOrEditQuiz />} />
+                {/* STANDALONE LECTURER ROUTES (Important: These must be outside the ClassroomManager Route to show full screen) */}
+                // App.js example
+<Route path="/lecturer/class/:classId/mark-assessment/:studentId" element={<MarkAssessment />} />
+                <Route 
+                    path="/lecturer/class/:classId/create-quiz" 
+                    element={user?.role === 'LECTURER' ? <CreateOrEditQuiz /> : <Navigate to="/" />} 
+                />
+                <Route 
+                    path="/lecturer/class/:classId/edit-quiz/:quizId" 
+                    element={user?.role === 'LECTURER' ? <CreateOrEditQuiz /> : <Navigate to="/" />} 
+                />
 
-                {/* 6. STUDENT ROUTES (Dashboard + Nested Classrooms) */}
+                {/* 4. STUDENT */}
                 <Route path="/student" element={user?.role === 'STUDENT' ? <StudentDashboard studentId={user.id} /> : <Navigate to="/" />} />
 
                 <Route path="/student/class/:classId" element={user?.role === 'STUDENT' ? <StudentClassManager /> : <Navigate to="/" />}>
@@ -111,18 +132,15 @@ function App() {
                     <Route path="history" element={<StudentHistory user={user} />} />
                 </Route>
 
-                {/* 7. STANDALONE ASSESSMENT PAGES (Full Focus Mode) */}
                 <Route 
                     path="/student/take-test/:testId" 
                     element={user?.role === 'STUDENT' ? <TakeTest user={user} /> : <Navigate to="/" />} 
                 />
-                
                 <Route 
                     path="/student/review/:testId" 
                     element={user?.role === 'STUDENT' ? <ReviewTest user={user} /> : <Navigate to="/" />} 
                 />
 
-                {/* 8. CATCH-ALL REDIRECT */}
                 <Route path="*" element={<Navigate to="/" />} />
             </Routes>
         </div>

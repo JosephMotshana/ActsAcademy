@@ -21,7 +21,12 @@ const ReviewTest = ({ user }) => {
                 setError("Could not load the assessment review.");
             }
         };
-        if (activeId && user?.id) fetchReview();
+        if (activeId && user?.id) {
+            fetchReview();
+            // Refetch every 3 seconds to catch updated scores from lecturer marking
+            const interval = setInterval(fetchReview, 3000);
+            return () => clearInterval(interval);
+        }
     }, [activeId, user.id]);
 
     if (error) return <div style={{ padding: '50px', textAlign: 'center' }}><h3>{error}</h3><button onClick={() => navigate(-1)}>Go Back</button></div>;

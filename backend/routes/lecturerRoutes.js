@@ -34,7 +34,8 @@ router.post('/add-material', upload.single('file'), lecturerController.addMateri
 router.delete('/material/:id', lecturerController.deleteMaterial);
 
 // --- QUIZ & PERFORMANCE ---
-
+router.get('/pending-students/:classId', lecturerController.getPendingStudents);
+router.put('/quiz/:quizId', lecturerController.updateQuiz);
 // Check line 38 in lecturerRoutes.js
 router.get('/performance/:classId', lecturerController.getPerformance);
 // Add these to your existing lecturer routes
@@ -51,5 +52,6 @@ router.post('/submit-mark', lecturerController.submitMark);
 router.get('/performance/:classId', lecturerController.getPerformance);
 // Make sure the ":classId" part is there!
 router.post('/create-quiz/:classId', lecturerController.createQuiz);
+// In lecturerRoutes.js
 
 module.exports = router;

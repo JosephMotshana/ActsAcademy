@@ -11,17 +11,21 @@ const StudentHistory = ({ user }) => {
     useEffect(() => {
         const fetchHistory = async () => {
             try {
-                // The quiz_id is essential here for the navigation below
                 const res = await axios.get(`http://localhost:5000/api/student/test-history/${classId}/${user.id}`);
                 setHistory(res.data);
-                setLoading(false);
             } catch (err) {
-                console.error("Error fetching history:", err);
+                console.error("Error fetching history", err);
+            } finally {
                 setLoading(false);
             }
         };
-        if (classId && user?.id) fetchHistory();
-    }, [classId, user.id]);
+        if (classId && user?.id) {
+            fetchHistory();
+            // Refetch every 2 seconds to see updated marks
+            const interval = setInterval(fetchHistory, 2000);
+            return () => clearInterval(interval);
+        }
+    }, [classId, user?.id]);
 
     if (loading) return <p style={{ padding: '40px', textAlign: 'center', color: '#1a237e' }}>Loading your history...</p>;
 
