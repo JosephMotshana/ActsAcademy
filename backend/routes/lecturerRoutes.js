@@ -44,7 +44,7 @@ router.get('/live-link/:classId', lecturerController.getLiveLink);
 router.post('/update-live-link', lecturerController.updateLiveLink);
 router.get('/live-status/:classId', lecturerController.getLiveStatus);
 // Route to get essay answers that need marking
-router.get('/pending-marks/:classId', lecturerController.getPendingMarks);
+router.get('/pending-marks/:classId/:studentId', lecturerController.getPendingMarks);
 router.get('/classroom/:classId/quizzes', lecturerController.getClassroomQuizzes);
 router.delete('/quiz/:quizId', lecturerController.deleteQuiz);
 // Route to save the score you give

@@ -117,7 +117,7 @@ exports.getPerformance = async (req, res) => {
             u.username AS student_name,
             COUNT(DISTINCT sa.quiz_id) AS quizzes_completed,
             /* Calculate sum of marks awarded */
-            IFNULL(SUM(sa.is_correct), 0) AS total_points_earned,
+            IFNULL(SUM(sa.marks_awarded), 0) AS total_points_earned,
             /* Calculate total possible marks (assuming 10 points per quiz) */
             (SELECT COUNT(*) * 10 FROM quizzes WHERE classroom_id = ?) AS total_possible_points
         FROM users u
@@ -154,27 +154,27 @@ exports.getStudentAttemptDetail = async (req, res) => {
     }
 };
 exports.getPendingMarks = async (req, res) => {
-    const { classId } = req.params;
+    const { classId, studentId } = req.params;
 
-    // Based on your screenshot:
-    // 1. Table is 'questions', not 'quiz_questions'
-    // 2. Essay answers are likely in 'student_essay_answers'
+    // Based on your database: Essay answers are in 'student_answers' table
     const query = `
         SELECT 
-            sea.id, 
+            sa.id, 
             u.username, 
             q.question_text, 
-            sea.answer_text 
-        FROM student_essay_answers sea
-        JOIN users u ON sea.student_id = u.id
-        JOIN questions q ON sea.question_id = q.id
+            sa.answer_text 
+        FROM student_answers sa
+        JOIN users u ON sa.student_id = u.id
+        JOIN questions q ON sa.question_id = q.id
         JOIN quizzes qz ON q.quiz_id = qz.id
         WHERE qz.classroom_id = ? 
-        AND sea.marks_awarded IS NULL
+        AND sa.student_id = ?
+        AND q.question_type = 'ESSAY'
+        AND sa.marks_awarded IS NULL
     `;
 
     try {
-        const [rows] = await db.query(query, [classId]);
+        const [rows] = await db.query(query, [classId, studentId]);
         res.json(rows);
     } catch (err) {
         console.error("PENDING MARKS ERROR:", err.message);
@@ -188,19 +188,63 @@ exports.getPendingMarks = async (req, res) => {
 exports.submitMark = async (req, res) => {
     const { answerId, marks } = req.body;
     try {
-        // Update the individual answer. 
-        // Note: Based on your DB screenshot, we use 'is_correct' to store the marks.
-        const query = `UPDATE student_answers SET is_correct = ? WHERE id = ?`;
-        
-        const [result] = await db.query(query, [marks, answerId]);
+        const [[answerRow]] = await db.query(
+            'SELECT quiz_id, student_id FROM student_answers WHERE id = ?',
+            [answerId]
+        );
 
-        if (result.affectedRows === 0) {
-            return res.status(404).json({ error: "Answer record not found" });
+        if (!answerRow) {
+            return res.status(404).json({ error: 'Answer record not found' });
         }
 
-        res.json({ message: "Mark saved successfully!" });
+        const { quiz_id: quizId, student_id: studentId } = answerRow;
+
+        await db.query(
+            'UPDATE student_answers SET marks_awarded = ? WHERE id = ?',
+            [marks, answerId]
+        );
+
+        // If all essay answers are now marked, recalculate the final quiz score.
+        const [pendingRows] = await db.query(
+            `SELECT sa.id
+             FROM student_answers sa
+             JOIN questions q ON sa.question_id = q.id
+             WHERE sa.quiz_id = ?
+               AND sa.student_id = ?
+               AND q.question_type = 'ESSAY'
+               AND sa.marks_awarded IS NULL`,
+            [quizId, studentId]
+        );
+
+        let updatedScore = null;
+        if (pendingRows.length === 0) {
+            const [[scoreRow]] = await db.query(
+                `SELECT 
+                    SUM(COALESCE(sa.marks_awarded, 0)) AS earned,
+                    COUNT(*) AS total
+                 FROM student_answers sa
+                 WHERE sa.quiz_id = ? AND sa.student_id = ?`,
+                [quizId, studentId]
+            );
+
+            const earned = Number(scoreRow.earned ?? 0);
+            const total = Number(scoreRow.total ?? 0);
+            const newScore = total > 0 ? Math.round((earned / total) * 100) : 0;
+
+            await db.query(
+                'UPDATE quiz_results SET score_percentage = ? WHERE quiz_id = ? AND student_id = ?',
+                [newScore, quizId, studentId]
+            );
+            updatedScore = newScore;
+        }
+
+        res.json({
+            message: 'Mark submitted successfully',
+            scoreUpdated: updatedScore !== null,
+            scorePercentage: updatedScore
+        });
     } catch (err) {
-        console.error("Submit Mark Error:", err);
+        console.error('Submit Mark Error:', err);
         res.status(500).json({ error: err.message });
     }
 };
@@ -213,7 +257,8 @@ exports.getPendingStudents = async (req, res) => {
             FROM student_answers sa
             JOIN users u ON sa.student_id = u.id
             JOIN quizzes q ON sa.quiz_id = q.id
-            WHERE q.classroom_id = ? AND sa.is_correct IS NULL
+            JOIN questions qq ON sa.question_id = qq.id
+            WHERE q.classroom_id = ? AND sa.marks_awarded IS NULL AND qq.question_type = 'ESSAY'
             GROUP BY u.id`;
         
         const [rows] = await db.query(query, [classId]);

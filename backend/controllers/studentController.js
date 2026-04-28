@@ -137,6 +137,18 @@ exports.submitQuiz = async (req, res) => {
                 [testId, userId, qId, text]
             );
         }
+
+        // Set marks for MCQ answers
+        for (const q of correctAnswers) {
+            if (q.question_type === 'MCQ') {
+                const marks = answers[q.id] === q.correct_option ? 1 : 0;
+                await db.query(
+                    'UPDATE student_answers SET marks_awarded = ? WHERE quiz_id = ? AND student_id = ? AND question_id = ?',
+                    [marks, testId, userId, q.id]
+                );
+            }
+        }
+
         res.status(201).json({ message: "Submitted successfully!" });
     } catch (err) {
         res.status(500).json({ error: err.message });
