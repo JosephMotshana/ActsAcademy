@@ -77,7 +77,7 @@ const LiveClass = () => {
                     
                     {/* THIS IS THE TIME DISPLAY */}
                     <div style={{ fontSize: '1.4rem', fontWeight: 'bold', color: '#333', marginBottom: '15px' }}>
-                        📅 {formatDisplayTime(currentClass.scheduled_time)}
+                         {formatDisplayTime(currentClass.scheduled_time)}
                     </div>
 
                     <a href={currentClass.live_link} target="_blank" rel="noreferrer" 

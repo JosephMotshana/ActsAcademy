@@ -36,7 +36,7 @@ const StudentTests = ({ user }) => {
 
     return (
         <div style={{ padding: '10px' }}>
-            <h2 style={{ color: '#1a237e', marginBottom: '5px' }}>📝 Pending Assessments</h2>
+            <h2 style={{ color: '#1a237e', marginBottom: '5px' }}> Pending Assessments</h2>
             <p style={{ color: '#666', marginBottom: '20px' }}>Select a test to begin. Please ensure you have a stable connection.</p>
             
             <div style={{ display: 'grid', gap: '15px' }}>

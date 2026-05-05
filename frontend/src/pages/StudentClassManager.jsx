@@ -10,10 +10,10 @@ const StudentClassManager = () => {
                 <Link to="/student" style={{ color: '#cfd8dc', textDecoration: 'none' }}>← Back to Home</Link>
                 <h2 style={{ margin: '20px 0' }}>Classroom</h2>
                 <ul style={{ listStyle: 'none', padding: 0 }}>
-                    <li><Link to="live" style={navStyle}>🎥 Live Session</Link></li>
-                    <li><Link to="materials" style={navStyle}>📚 Study Materials</Link></li>
-                    <li><Link to="tests" style={navStyle}>📝 Available Tests</Link></li>
-                    <li><Link to="history" style={navStyle}>📊 My Results</Link></li>
+                    <li><Link to="live" style={navStyle}> Live Session</Link></li>
+                    <li><Link to="materials" style={navStyle}> Study Materials</Link></li>
+                    <li><Link to="tests" style={navStyle}> Available Tests</Link></li>
+                    <li><Link to="history" style={navStyle}> My Results</Link></li>
                 </ul>
             </nav>
             <main style={{ flex: 1, padding: '30px', backgroundColor: '#f5f5f5' }}>

@@ -187,6 +187,11 @@ exports.getPendingMarks = async (req, res) => {
 // lecturerController.js - Updated submitMark
 exports.submitMark = async (req, res) => {
     const { answerId, marks } = req.body;
+    const parsedMarks = Number(marks);
+    if (Number.isNaN(parsedMarks) || parsedMarks < 0) {
+        return res.status(400).json({ error: 'Marks must be a non-negative number' });
+    }
+
     try {
         const [[answerRow]] = await db.query(
             'SELECT quiz_id, student_id FROM student_answers WHERE id = ?',
@@ -201,7 +206,7 @@ exports.submitMark = async (req, res) => {
 
         await db.query(
             'UPDATE student_answers SET marks_awarded = ? WHERE id = ?',
-            [marks, answerId]
+            [parsedMarks, answerId]
         );
 
         // If all essay answers are now marked, recalculate the final quiz score.
@@ -376,25 +381,37 @@ exports.getQuizDetails = async (req, res) => {
 
 exports.updateQuiz = async (req, res) => {
     const { quizId } = req.params;
-    const { title, description, questions } = req.body;
+    const { title, questions } = req.body;
 
     try {
         // 1. Update Quiz Header
-        await db.query(`UPDATE quizzes SET title = ?, description = ? WHERE id = ?`, [title, description, quizId]);
+        await db.query(`UPDATE quizzes SET title = ? WHERE id = ?`, [title, quizId]);
 
         // 2. Simplest way to update questions: Delete old ones and insert new ones
         // (Alternatively, you can loop and update by ID, but this is cleaner for dynamic forms)
         await db.query(`DELETE FROM questions WHERE quiz_id = ?`, [quizId]);
 
-        for (let q of questions) {
+        for (let q of questions || []) {
             await db.query(
-                `INSERT INTO questions (quiz_id, question_text, question_type, correct_answer) VALUES (?, ?, ?, ?)`,
-                [quizId, q.question_text, q.question_type, q.correct_answer]
+                `INSERT INTO questions 
+                (quiz_id, question_text, question_type, option_a, option_b, option_c, option_d, correct_option) 
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+                [
+                    quizId,
+                    q.question_text,
+                    q.question_type,
+                    q.option_a || null,
+                    q.option_b || null,
+                    q.option_c || null,
+                    q.option_d || null,
+                    q.correct_option || null
+                ]
             );
         }
 
         res.json({ message: "Quiz updated successfully!" });
     } catch (err) {
+        console.error('Update Quiz Error:', err);
         res.status(500).json({ error: err.message });
     }
 };

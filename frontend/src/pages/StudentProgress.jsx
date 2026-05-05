@@ -22,7 +22,7 @@ const StudentProgress = () => {
 
     return (
         <div style={{ padding: '20px' }}>
-            <h2 style={{ color: '#1a237e' }}>📊 Student Performance Tracking</h2>
+            <h2 style={{ color: '#1a237e' }}> Student Performance Tracking</h2>
             <table style={{ width: '100%', borderCollapse: 'collapse', marginTop: '20px', backgroundColor: 'white', boxShadow: '0 2px 8px rgba(0,0,0,0.1)' }}>
                 <thead>
                     <tr style={{ backgroundColor: '#f0f2f5', textAlign: 'left' }}>

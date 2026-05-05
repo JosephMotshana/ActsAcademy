@@ -35,6 +35,7 @@ router.delete('/material/:id', lecturerController.deleteMaterial);
 
 // --- QUIZ & PERFORMANCE ---
 router.get('/pending-students/:classId', lecturerController.getPendingStudents);
+router.get('/quiz-details/:quizId', lecturerController.getQuizDetails);
 router.put('/quiz/:quizId', lecturerController.updateQuiz);
 // Check line 38 in lecturerRoutes.js
 router.get('/performance/:classId', lecturerController.getPerformance);

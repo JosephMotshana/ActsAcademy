@@ -78,7 +78,7 @@ const StudyMaterials = () => {
 
     return (
         <div style={{ maxWidth: '800px', margin: '0 auto', padding: '20px' }}>
-            <h2>📚 Manage Course Materials</h2>
+            <h2> Manage Course Materials</h2>
             
             {/* Upload Form */}
             <form onSubmit={handleUpload} style={{ display: 'grid', gap: '15px', backgroundColor: '#f8f9fa', padding: '20px', borderRadius: '10px', marginBottom: '30px', border: '1px solid #dee2e6' }}>
@@ -91,10 +91,10 @@ const StudyMaterials = () => {
                 />
                 
                 <select value={type} onChange={e => setType(e.target.value)} style={{padding: '10px', borderRadius: '5px', border: '1px solid #ccc'}}>
-                    <option value="document">📄 Document (PDF/Word)</option>
-                    <option value="image">🖼️ Picture</option>
-                    <option value="video">🎥 Video File</option>
-                    <option value="link">🔗 Web Link (Drive/YouTube)</option>
+                    <option value="document"> Document (PDF/Word)</option>
+                    <option value="image"> Picture</option>
+                    <option value="video"> Video File</option>
+                    <option value="link"> Web Link (Drive/YouTube)</option>
                 </select>
 
                 {type === 'link' ? (

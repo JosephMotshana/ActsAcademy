@@ -7,11 +7,11 @@ const ClassroomManager = () => {
 
     // Menu items for the nested Outlet
     const menuItems = [
-        { name: 'Study Materials', path: 'materials', icon: '📚' },
-        { name: 'Live Classes', path: 'live', icon: '🎥' },
-        { name: 'Manage Assessments', path: 'manage-quizzes', icon: '⚙️' }, 
-        { name: 'Performance', path: 'performance', icon: '📈' },
-        { name: 'Mark Assessments', path: 'mark-assessment', icon: '✅' }
+        { name: 'Study Materials', path: 'materials'},
+        { name: 'Live Classes', path: 'live' },
+        { name: 'Manage Assessments', path: 'manage-quizzes'}, 
+        { name: 'Performance', path: 'performance'},
+        { name: 'Mark Assessments', path: 'mark-assessment' }
     ];
 
     return (
@@ -74,7 +74,7 @@ const ClassroomManager = () => {
                                 boxShadow: '0 4px 6px rgba(0,0,0,0.1)'
                             }}
                         >
-                            ➕ NEW ASSESSMENT
+                            NEW ASSESSMENT
                         </Link>
                     </li>
                 </ul>

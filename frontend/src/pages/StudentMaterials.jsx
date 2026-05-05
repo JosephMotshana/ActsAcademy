@@ -51,7 +51,7 @@ const StudentMaterials = () => {
     return (
         <div style={{ maxWidth: '900px', margin: '0 auto', padding: '20px' }}>
             <h2 style={{ color: '#1a237e', borderBottom: '2px solid #1a237e', paddingBottom: '10px' }}>
-                📚 Study Materials
+                 Study Materials
             </h2>
             
             <div style={{ display: 'grid', gap: '20px', marginTop: '20px' }}>
@@ -69,27 +69,27 @@ const StudentMaterials = () => {
                             <div style={{ margin: '15px 0', background: '#f4f4f4', borderRadius: '8px', overflow: 'hidden' }}>
                                 {m.type === 'image' && <img src={fileUrl} alt="" style={{ width: '100%', maxHeight: '300px', objectFit: 'contain' }} />}
                                 {m.type === 'video' && <video src={fileUrl} controls style={{ width: '100%' }} />}
-                                {m.type === 'document' && <div style={{ padding: '20px', textAlign: 'center' }}>📄 PDF/Document Ready</div>}
+                                {m.type === 'document' && <div style={{ padding: '20px', textAlign: 'center' }}> PDF/Document Ready</div>}
                             </div>
 
                             {/* ACTIONS */}
                             <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
                                 {m.type === 'link' ? (
                                     <a href={fileUrl} target="_blank" rel="noreferrer" style={buttonStyle('#ff9800')}>
-                                        🔗 Open Link
+                                         Open Link
                                     </a>
                                 ) : (
                                     <>
                                         {/* VIEW BUTTON */}
                                         <a href={fileUrl} target="_blank" rel="noreferrer" style={buttonStyle('#1a237e')}>
-                                            👁️ View
+                                             View
                                         </a>
                                         {/* DOWNLOAD BUTTON */}
                                         <button 
                                             onClick={() => downloadFile(fileUrl, `${m.title}`)} 
                                             style={{ ...buttonStyle('#4caf50'), border: 'none', cursor: 'pointer' }}
                                         >
-                                            ⬇️ Save to Device
+                                            ⬇ Save to Device
                                         </button>
                                     </>
                                 )}

@@ -33,7 +33,7 @@ const StudentHistory = ({ user }) => {
         <div style={{ padding: '30px', maxWidth: '1000px', margin: '0 auto', animation: 'fadeIn 0.5s ease-in' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '25px' }}>
                 <h2 style={{ color: '#1a237e', margin: 0, display: 'flex', alignItems: 'center', gap: '12px' }}>
-                    <span style={{ fontSize: '1.5rem' }}>📊</span> My Assessment History
+                    <span style={{ fontSize: '1.5rem' }}></span> My Assessment History
                 </h2>
                 <span style={{ backgroundColor: '#e8eaf6', color: '#1a237e', padding: '5px 15px', borderRadius: '20px', fontSize: '0.9rem', fontWeight: 'bold' }}>
                     {history.length} {history.length === 1 ? 'Assessment' : 'Assessments'}
@@ -127,7 +127,7 @@ const StudentHistory = ({ user }) => {
                         }) : (
                             <tr>
                                 <td colSpan="4" style={{ padding: '60px', textAlign: 'center', color: '#999' }}>
-                                    <div style={{ fontSize: '3rem', marginBottom: '10px' }}>📁</div>
+                                    <div style={{ fontSize: '3rem', marginBottom: '10px' }}></div>
                                     No assessments found for this class.
                                 </td>
                             </tr>

@@ -51,8 +51,12 @@ const MarkAssessment = () => {
     }, [classId, studentId]);
 
   const submitMark = async (answerId) => {
-    const score = marks[answerId];
-    if (score === undefined || score === "") return alert("Please enter a score");
+    const rawScore = marks[answerId];
+    if (rawScore === undefined || rawScore === "") return alert("Please enter a score");
+
+    const score = Number(rawScore);
+    if (Number.isNaN(score)) return alert("Please enter a valid numeric score");
+    if (score < 0) return alert("Score cannot be negative. Please enter zero or higher.");
     
     try {
         await axios.post(`http://localhost:5000/api/lecturer/submit-mark`, {
@@ -142,6 +146,7 @@ const MarkAssessment = () => {
                             <input 
                                 type="number" 
                                 placeholder="Enter Marks" 
+                                min="0"
                                 value={marks[ans.id] || ""}
                                 onChange={(e) => setMarks({...marks, [ans.id]: e.target.value})}
                                 style={{ width: '120px', padding: '10px', borderRadius: '5px', border: '1px solid #ccc' }}

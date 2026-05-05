@@ -7,6 +7,9 @@ const PerformancePage = () => {
     const navigate = useNavigate();
     const [students, setStudents] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [studentHistories, setStudentHistories] = useState({});
+    const [historyLoading, setHistoryLoading] = useState({});
+    const [expandedStudents, setExpandedStudents] = useState({});
 
     const fetchPerformance = useCallback(async () => {
         setLoading(true);
@@ -19,6 +22,22 @@ const PerformancePage = () => {
             setLoading(false);
         }
     }, [classId]);
+
+    const loadStudentHistory = async (studentId) => {
+        setExpandedStudents(prev => ({ ...prev, [studentId]: !prev[studentId] }));
+
+        if (studentHistories[studentId] || historyLoading[studentId]) return;
+
+        setHistoryLoading(prev => ({ ...prev, [studentId]: true }));
+        try {
+            const res = await axios.get(`http://localhost:5000/api/student/test-history/${classId}/${studentId}`);
+            setStudentHistories(prev => ({ ...prev, [studentId]: res.data }));
+        } catch (err) {
+            console.error(`Error fetching quiz history for student ${studentId}`, err);
+        } finally {
+            setHistoryLoading(prev => ({ ...prev, [studentId]: false }));
+        }
+    };
 
     useEffect(() => {
         fetchPerformance();
@@ -43,54 +62,90 @@ const PerformancePage = () => {
                     <thead>
                         <tr style={{ backgroundColor: '#1a237e', color: 'white', textAlign: 'left' }}>
                             <th style={{ padding: '15px' }}>Student Name</th>
-                            <th style={{ padding: '15px' }}>Progress</th>
-                            <th style={{ padding: '15px' }}>Total Marks</th>
                             <th style={{ padding: '15px', textAlign: 'center' }}>Action</th>
                         </tr>
                     </thead>
                     <tbody>
                         {students.length === 0 ? (
                             <tr>
-                                <td colSpan="4" style={{ padding: '40px', textAlign: 'center', color: '#666' }}>
+                                <td colSpan="2" style={{ padding: '40px', textAlign: 'center', color: '#666' }}>
                                     No students enrolled in this class yet.
                                 </td>
                             </tr>
                         ) : students.map(s => {
                             const hasSubmitted = s.quizzes_completed > 0;
                             return (
-                                <tr key={s.student_id} style={{ borderBottom: '1px solid #eee' }}>
-                                    <td style={{ padding: '15px' }}>
-                                        <div style={{ fontWeight: 'bold', color: '#333' }}>{s.student_name}</div>
-                                        <div style={{ fontSize: '0.8rem', color: '#888' }}>ID: #{s.student_id}</div>
-                                    </td>
-                                    <td style={{ padding: '15px' }}>
-                                        <span style={{ 
-                                            color: hasSubmitted ? '#2e7d32' : '#d32f2f', 
-                                            backgroundColor: hasSubmitted ? '#e8f5e9' : '#ffebee', 
-                                            padding: '5px 10px', borderRadius: '15px', fontSize: '0.8rem', fontWeight: 'bold' 
-                                        }}>
-                                            {hasSubmitted ? `${s.quizzes_completed} Submission(s)` : 'No Submissions'}
-                                        </span>
-                                    </td>
-                                <td style={{ padding: '15px', fontWeight: '500' }}>
-                                    {Number(s.total_points_earned).toFixed(0)} / {s.total_possible_points}
-                                </td>
-                                    <td style={{ padding: '15px', textAlign: 'center' }}>
-                                        <button 
-                                            disabled={!hasSubmitted}
-                                            onClick={() => navigate(`/lecturer/class/${classId}/mark-assessment/${s.student_id}`)}
-                                            style={{ 
-                                                backgroundColor: hasSubmitted ? '#1a237e' : '#ccc', 
-                                                color: 'white', border: 'none', padding: '8px 16px', 
-                                                borderRadius: '5px', cursor: hasSubmitted ? 'pointer' : 'not-allowed',
-                                                transition: '0.3s'
-                                            }}
-                                        >
-                                            {hasSubmitted ? 'Review & Mark' : 'Pending'}
-                                        </button>
-                                    </td>
-
-                                </tr>
+                                <React.Fragment key={s.student_id}>
+                                    <tr style={{ borderBottom: '1px solid #eee' }}>
+                                        <td style={{ padding: '15px' }}>
+                                            <div style={{ fontWeight: 'bold', color: '#333' }}>{s.student_name}</div>
+                                            <div style={{ fontSize: '0.8rem', color: '#888' }}>ID: #{s.student_id}</div>
+                                        </td>
+                                        <td style={{ padding: '15px', textAlign: 'center' }}>
+                                            <button 
+                                                disabled={!hasSubmitted}
+                                                onClick={() => navigate(`/lecturer/class/${classId}/mark-assessment/${s.student_id}`)}
+                                                style={{ 
+                                                    backgroundColor: hasSubmitted ? '#1a237e' : '#ccc', 
+                                                    color: 'white', border: 'none', padding: '8px 16px', 
+                                                    borderRadius: '5px', cursor: hasSubmitted ? 'pointer' : 'not-allowed',
+                                                    transition: '0.3s'
+                                                }}
+                                            >
+                                                {hasSubmitted ? 'Review & Mark' : 'Pending'}
+                                            </button>
+                                            <button
+                                                onClick={() => loadStudentHistory(s.student_id)}
+                                                style={{
+                                                    marginLeft: '10px',
+                                                    backgroundColor: '#1976d2',
+                                                    color: 'white',
+                                                    border: 'none',
+                                                    padding: '8px 16px',
+                                                    borderRadius: '5px',
+                                                    cursor: 'pointer'
+                                                }}
+                                            >
+                                                {expandedStudents[s.student_id] ? 'Hide Quizzes' : 'Show Quizzes'}
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    {expandedStudents[s.student_id] && (
+                                        <tr key={`details-${s.student_id}`} style={{ backgroundColor: '#f9fafb' }}>
+                                            <td colSpan="2" style={{ padding: '15px' }}>
+                                                {historyLoading[s.student_id] ? (
+                                                    <div>Loading quiz details...</div>
+                                                ) : (
+                                                    <div>
+                                                        <strong>Quiz Details</strong>
+                                                        {studentHistories[s.student_id] && studentHistories[s.student_id].length > 0 ? (
+                                                            <table style={{ width: '100%', borderCollapse: 'collapse', marginTop: '10px' }}>
+                                                                <thead>
+                                                                    <tr style={{ backgroundColor: '#eeeeee', color: '#333' }}>
+                                                                        <th style={{ padding: '10px', textAlign: 'left' }}>Quiz</th>
+                                                                        <th style={{ padding: '10px', textAlign: 'left' }}>Score (%)</th>
+                                                                        <th style={{ padding: '10px', textAlign: 'left' }}>Completed</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    {studentHistories[s.student_id].map(history => (
+                                                                        <tr key={history.quiz_id} style={{ borderBottom: '1px solid #ddd' }}>
+                                                                            <td style={{ padding: '10px' }}>{history.title}</td>
+                                                                            <td style={{ padding: '10px' }}>{history.score_percentage === null ? 'Pending' : Number(history.score_percentage).toFixed(0)}</td>
+                                                                            <td style={{ padding: '10px' }}>{history.completed_at ? new Date(history.completed_at).toLocaleDateString() : '—'}</td>
+                                                                        </tr>
+                                                                    ))}
+                                                                </tbody>
+                                                            </table>
+                                                        ) : (
+                                                            <div style={{ marginTop: '10px', color: '#666' }}>No quizzes have been completed yet.</div>
+                                                        )}
+                                                    </div>
+                                                )}
+                                            </td>
+                                        </tr>
+                                    )}
+                                </React.Fragment>
                             );
                         })}
                     </tbody>
