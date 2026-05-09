@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
+import '../../style/global.css';
 
 const StudyMaterials = () => {
     const { classId } = useParams();
@@ -12,7 +13,6 @@ const StudyMaterials = () => {
 
     const fetchMaterials = async () => {
         try {
-            // Ensure this matches your backend port (usually 5000)
             const res = await axios.get(`http://localhost:5000/api/lecturer/materials/${classId}`);
             setMaterials(res.data);
         } catch (err) {
@@ -50,18 +50,14 @@ const StudyMaterials = () => {
         try {
             await axios.post('http://localhost:5000/api/lecturer/add-material', formData);
             alert("Uploaded successfully!");
-            
-            // Reset form
             setTitle('');
             setLink('');
             setFile(null);
-            document.getElementById("fileInput").value = ""; // Clear file input manually
-            
-            fetchMaterials(); // Refresh the list
+            document.getElementById("fileInput").value = ""; 
+            fetchMaterials(); 
         } catch (err) {
             const backendError = err.response?.data?.error || err.message;
             alert(`Upload failed: ${backendError}`);
-            console.error("Full error:", err);
         }
     };
 
@@ -77,77 +73,84 @@ const StudyMaterials = () => {
     };
 
     return (
-        <div style={{ maxWidth: '800px', margin: '0 auto', padding: '20px' }}>
-            <h2> Manage Course Materials</h2>
+        <div className="study-materials-container">
+            <h2 className="materials-page-title">Manage Course Materials</h2>
             
             {/* Upload Form */}
-            <form onSubmit={handleUpload} style={{ display: 'grid', gap: '15px', backgroundColor: '#f8f9fa', padding: '20px', borderRadius: '10px', marginBottom: '30px', border: '1px solid #dee2e6' }}>
+            <form onSubmit={handleUpload} className="materials-upload-form">
                 <input 
+                    className="material-input-field"
                     placeholder="Material Title (e.g. Week 1 Lecture Notes)" 
                     value={title} 
                     onChange={e => setTitle(e.target.value)} 
                     required 
-                    style={{padding: '10px', borderRadius: '5px', border: '1px solid #ccc'}}
                 />
                 
-                <select value={type} onChange={e => setType(e.target.value)} style={{padding: '10px', borderRadius: '5px', border: '1px solid #ccc'}}>
-                    <option value="document"> Document (PDF/Word)</option>
-                    <option value="image"> Picture</option>
-                    <option value="video"> Video File</option>
-                    <option value="link"> Web Link (Drive/YouTube)</option>
+                <select 
+                    className="material-select-field"
+                    value={type} 
+                    onChange={e => setType(e.target.value)}
+                >
+                    <option value="document">Document (PDF/Word)</option>
+                    <option value="image">Picture</option>
+                    <option value="video">Video File</option>
+                    <option value="link">Web Link (Drive/YouTube)</option>
                 </select>
 
                 {type === 'link' ? (
                     <input 
+                        className="material-input-field"
                         placeholder="Paste URL here (https://...)" 
                         value={link} 
                         onChange={e => setLink(e.target.value)} 
                         required
-                        style={{padding: '10px', borderRadius: '5px', border: '1px solid #ccc'}}
                     />
                 ) : (
                     <input 
+                        className="material-file-input"
                         id="fileInput"
                         type="file" 
                         onChange={e => setFile(e.target.files[0])} 
                         required
-                        style={{padding: '10px'}}
                     />
                 )}
 
-                <button type="submit" style={{ backgroundColor: '#1a237e', color: 'white', padding: '12px', border: 'none', borderRadius: '5px', cursor: 'pointer', fontWeight: 'bold' }}>
+                <button type="submit" className="btn-post-material">
                     Post to Classroom
                 </button>
             </form>
 
             {/* List of Materials */}
-            <div style={{ display: 'grid', gap: '15px' }}>
-                <h3>Current Materials</h3>
-                {materials.length === 0 ? <p>No materials uploaded yet.</p> : materials.map(m => (
-                    <div key={m.id} style={{ padding: '15px', border: '1px solid #ddd', borderRadius: '8px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', backgroundColor: 'white', boxShadow: '0 2px 4px rgba(0,0,0,0.05)' }}>
-                        <div>
-                            <strong>{m.title}</strong> <br />
-                            <small style={{color: '#666', textTransform: 'capitalize'}}>{m.type}</small>
+            <div className="materials-list-section">
+                <h3 className="materials-list-title">Current Materials</h3>
+                {materials.length === 0 ? (
+                    <p className="no-materials-text">No materials uploaded yet.</p>
+                ) : (
+                    materials.map(m => (
+                        <div key={m.id} className="material-item-card">
+                            <div className="material-meta">
+                                <strong className="material-item-title">{m.title}</strong> <br />
+                                <small className="material-type-tag">{m.type}</small>
+                            </div>
+                            <div className="material-item-actions">
+                                <a 
+                                    href={m.file_url && m.file_url.startsWith('http') ? m.file_url : `http://localhost:5000${m.file_url}`} 
+                                    target="_blank" 
+                                    rel="noreferrer" 
+                                    className="btn-view-material"
+                                >
+                                    View
+                                </a>
+                                <button 
+                                    onClick={() => handleDelete(m.id)} 
+                                    className="btn-delete-material"
+                                >
+                                    Delete
+                                </button>
+                            </div>
                         </div>
-                        <div style={{display: 'flex', gap: '15px', alignItems: 'center'}}>
-                            {/* FIXED LINK LOGIC BELOW */}
-                            <a 
-                                href={m.file_url && m.file_url.startsWith('http') ? m.file_url : `http://localhost:5000${m.file_url}`} 
-                                target="_blank" 
-                                rel="noreferrer" 
-                                style={{ color: '#1a237e', textDecoration: 'none', fontWeight: 'bold', border: '1px solid #1a237e', padding: '5px 10px', borderRadius: '4px' }}
-                            >
-                                View
-                            </a>
-                            <button 
-                                onClick={() => handleDelete(m.id)} 
-                                style={{color: '#d32f2f', border: 'none', background: 'none', cursor: 'pointer', fontWeight: '500'}}
-                            >
-                                Delete
-                            </button>
-                        </div>
-                    </div>
-                ))}
+                    ))
+                )}
             </div>
         </div>
     );

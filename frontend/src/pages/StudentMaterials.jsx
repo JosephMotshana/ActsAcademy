@@ -89,7 +89,7 @@ const StudentMaterials = () => {
                                             onClick={() => downloadFile(fileUrl, `${m.title}`)} 
                                             style={{ ...buttonStyle('#4caf50'), border: 'none', cursor: 'pointer' }}
                                         >
-                                            ⬇ Save to Device
+                                            Save to Device
                                         </button>
                                     </>
                                 )}

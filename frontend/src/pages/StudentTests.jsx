@@ -85,7 +85,7 @@ const StudentTests = ({ user }) => {
                     </div>
                 )) : (
                     <div style={{ textAlign: 'center', padding: '60px 20px', backgroundColor: '#f9f9f9', borderRadius: '15px', border: '2px dashed #ddd' }}>
-                        <span style={{ fontSize: '50px', display: 'block', marginBottom: '10px' }}>🎉</span>
+                        <span style={{ fontSize: '50px', display: 'block', marginBottom: '10px' }}></span>
                         <h3 style={{ color: '#1a237e', margin: '0' }}>All Caught Up!</h3>
                         <p style={{ color: '#666' }}>There are no pending assessments for you in this class at the moment.</p>
                     </div>

@@ -43,7 +43,7 @@ const StudentLive = () => {
 
     return (
         <div style={{ textAlign: 'center', padding: '50px', maxWidth: '600px', margin: '0 auto' }}>
-            <h2 style={{ color: '#1a237e' }}>🎥 {session?.classroomname || 'Classroom'} Live Hall</h2>
+            <h2 style={{ color: '#1a237e' }}> {session?.classroomname || 'Classroom'} Live Hall</h2>
             
             {session?.live_link ? (
                 <div style={{ 

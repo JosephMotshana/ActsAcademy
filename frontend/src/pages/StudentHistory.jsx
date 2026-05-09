@@ -73,7 +73,7 @@ const StudentHistory = ({ user }) => {
                                                 fontWeight: 'bold',
                                                 border: '1px solid #fff176'
                                             }}>
-                                                ⏳ Pending
+                                                 Pending
                                             </span>
                                         ) : (
                                             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>

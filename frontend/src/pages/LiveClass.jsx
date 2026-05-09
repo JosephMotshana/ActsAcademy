@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
+import '../../style/global.css';
 
 const LiveClass = () => {
     const { classId } = useParams();
@@ -11,8 +12,6 @@ const LiveClass = () => {
 
     const fetchCurrentStatus = async () => {
         try {
-            // Note: Use the lecturer-specific endpoint to ensure we get the data 
-            // even if the 12-hour student window hasn't started yet
             const res = await axios.get(`http://localhost:5000/api/lecturer/live-status/${classId}`);
             setCurrentClass(res.data);
         } catch (err) {
@@ -35,7 +34,7 @@ const LiveClass = () => {
             alert("Class Published!");
             setLink('');
             setStartTime('');
-            fetchCurrentStatus(); // Refresh the display box
+            fetchCurrentStatus(); 
         } catch (err) {
             alert("Failed to publish class.");
         } finally {
@@ -43,12 +42,10 @@ const LiveClass = () => {
         }
     };
 
-    // Formatter to ensure the date and time show up clearly
     const formatDisplayTime = (dateString) => {
         if (!dateString) return "No Time Set";
-        // Handles both MySQL format and ISO format
         const date = new Date(dateString.replace(' ', 'T'));
-        if (isNaN(date.getTime())) return dateString; // Fallback to raw string
+        if (isNaN(date.getTime())) return dateString;
 
         return date.toLocaleString('en-GB', {
             weekday: 'short',
@@ -61,63 +58,63 @@ const LiveClass = () => {
     };
 
     return (
-        <div style={{ padding: '20px', maxWidth: '800px', margin: '0 auto' }}>
-            <h2 style={{ color: '#1a237e' }}>🎥 Live Lesson Manager</h2>
+        <div className="live-manager-container">
+            <h2 className="live-manager-title">Live Lesson Manager</h2>
 
             {/* THE DISPLAY BOX */}
             {currentClass?.live_link && (
-                <div style={{ 
-                    background: '#f0f4ff', 
-                    padding: '25px', 
-                    borderRadius: '12px', 
-                    marginBottom: '30px', 
-                    border: '2px solid #1a237e' 
-                }}>
-                    <h3 style={{ margin: '0 0 10px 0', color: '#1a237e' }}>Active Class Schedule</h3>
+                <div className="active-class-card">
+                    <h3 className="card-subtitle">Active Class Schedule</h3>
                     
-                    {/* THIS IS THE TIME DISPLAY */}
-                    <div style={{ fontSize: '1.4rem', fontWeight: 'bold', color: '#333', marginBottom: '15px' }}>
+                    <div className="time-display">
                          {formatDisplayTime(currentClass.scheduled_time)}
                     </div>
 
-                    <a href={currentClass.live_link} target="_blank" rel="noreferrer" 
-                       style={{ 
-                           display: 'inline-block', 
-                           padding: '12px 30px', 
-                           background: '#4caf50', 
-                           color: 'white', 
-                           textDecoration: 'none', 
-                           borderRadius: '8px', 
-                           fontWeight: 'bold',
-                           fontSize: '1.1rem'
-                       }}>
-                       Attend Class
-                    </a>
-                    
-                    <button 
-                        onClick={async () => {
-                            await axios.post('http://localhost:5000/api/lecturer/update-live-link', { classId, live_link: null, scheduled_time: null });
-                            fetchCurrentStatus();
-                        }}
-                        style={{ marginLeft: '15px', background: 'none', border: 'none', color: 'red', cursor: 'pointer', textDecoration: 'underline' }}
-                    >
-                        Remove Link
-                    </button>
+                    <div className="card-actions">
+                        <a href={currentClass.live_link} target="_blank" rel="noreferrer" className="btn-attend">
+                           Attend Class
+                        </a>
+                        
+                        <button 
+                            className="btn-remove"
+                            onClick={async () => {
+                                await axios.post('http://localhost:5000/api/lecturer/update-live-link', { classId, live_link: null, scheduled_time: null });
+                                fetchCurrentStatus();
+                            }}
+                        >
+                            Remove Link
+                        </button>
+                    </div>
                 </div>
             )}
 
             {/* THE FORM */}
-            <div style={{ background: 'white', padding: '25px', borderRadius: '12px', border: '1px solid #ddd' }}>
-                <h3>Set Meeting Details</h3>
-                <div style={{ marginBottom: '15px' }}>
+            <div className="live-details-form">
+                <h3 className="card-subtitle">Set Meeting Details</h3>
+                <div className="form-input-group">
                     <label>Google Meet Link</label>
-                    <input type="text" value={link} onChange={e => setLink(e.target.value)} style={{ width: '100%', padding: '10px', marginTop: '5px' }} />
+                    <input 
+                        className="live-input"
+                        type="text" 
+                        value={link} 
+                        onChange={e => setLink(e.target.value)} 
+                        placeholder="https://meet.google.com/..."
+                    />
                 </div>
-                <div style={{ marginBottom: '20px' }}>
+                <div className="form-input-group">
                     <label>Date & Start Time</label>
-                    <input type="datetime-local" value={startTime} onChange={e => setStartTime(e.target.value)} style={{ width: '100%', padding: '10px', marginTop: '5px' }} />
+                    <input 
+                        className="live-input"
+                        type="datetime-local" 
+                        value={startTime} 
+                        onChange={e => setStartTime(e.target.value)} 
+                    />
                 </div>
-                <button onClick={handlePublish} disabled={loading} style={{ width: '100%', background: '#1a237e', color: 'white', padding: '12px', borderRadius: '8px', cursor: 'pointer' }}>
+                <button 
+                    className="btn-publish"
+                    onClick={handlePublish} 
+                    disabled={loading}
+                >
                     {loading ? "Saving..." : "Publish to Students"}
                 </button>
             </div>

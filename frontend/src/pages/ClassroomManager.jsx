@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useParams, Link, Outlet, useNavigate } from 'react-router-dom';
-
+import '../../style/global.css';
 const ClassroomManager = () => {
     const { classId } = useParams();
     const navigate = useNavigate();
+    const [menuOpen, setMenuOpen] = useState(false);
 
     // Menu items for the nested Outlet
     const menuItems = [
@@ -15,76 +16,65 @@ const ClassroomManager = () => {
     ];
 
     return (
-        <div style={{ display: 'flex', minHeight: '100vh', fontFamily: 'Arial', backgroundColor: '#f5f5f5' }}>
+        <div className="classroom-manager-layout">
             {/* LEFT SIDEBAR */}
-            <nav style={{ width: '280px', backgroundColor: '#1a237e', color: 'white', padding: '25px', boxShadow: '2px 0 10px rgba(0,0,0,0.1)' }}>
-                <button 
-                    onClick={() => navigate('/lecturer')} 
-                    style={{ background: 'none', border: 'none', color: '#8c9eff', cursor: 'pointer', marginBottom: '25px', fontSize: '0.9rem', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '5px' }}
-                >
-                    ← BACK TO DASHBOARD
-                </button>
-                
-                <h2 style={{ fontSize: '1.1rem', marginBottom: '30px', opacity: 0.8, letterSpacing: '1px', textTransform: 'uppercase' }}>
-                    Lecturer Tools
-                </h2>
+            <nav className="classroom-manager-sidebar">
+                <div className="classroom-manager-sidebar-header">
+                    <button 
+                        onClick={() => navigate('/lecturer')} 
+                        className="classroom-manager-back-button"
+                    >
+                        ← Classes
+                    </button>
 
-                <ul style={{ listStyle: 'none', padding: 0 }}>
-                    {menuItems.map(item => (
-                        <li key={item.path} style={{ marginBottom: '12px' }}>
-                            <Link 
-                                to={`/lecturer/class/${classId}/${item.path}`} 
-                                style={{ 
-                                    color: 'white', 
-                                    textDecoration: 'none', 
-                                    display: 'flex', 
-                                    alignItems: 'center', 
-                                    gap: '12px', 
-                                    padding: '12px 15px', 
-                                    borderRadius: '8px', 
-                                    backgroundColor: 'rgba(255,255,255,0.05)',
-                                    transition: 'all 0.2s ease'
-                                }}
-                                onMouseOver={(e) => e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.15)'}
-                                onMouseOut={(e) => e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.05)'}
-                            >
-                                <span style={{ fontSize: '1.2rem' }}>{item.icon}</span> 
-                                <span style={{ fontWeight: '500' }}>{item.name}</span>
-                            </Link>
-                        </li>
-                    ))}
+                    <button
+                        type="button"
+                        onClick={() => setMenuOpen(prev => !prev)}
+                        className="classroom-manager-hamburger-button"
+                        aria-expanded={menuOpen}
+                    >
+                        ☰ Lecturer Tools
+                    </button>
+                </div>
 
-                    <hr style={{ border: 'none', borderTop: '1px solid rgba(255,255,255,0.1)', margin: '25px 0' }} />
+                <div className={menuOpen ? 'classroom-manager-menu-visible' : 'classroom-manager-menu-hidden'}>
+                    <h2 className="classroom-manager-title">
+                        Lecturer Tools
+                    </h2>
 
-                    {/* ACTIONS */}
-                    <li>
+                    <ul className="classroom-manager-menu">
+                        {menuItems.map(item => (
+                            <li key={item.path} className="classroom-manager-menu-item">
                         <Link 
-                            to={`/lecturer/class/${classId}/create-quiz`} 
-                            style={{ 
-                                color: 'white', 
-                                textDecoration: 'none', 
-                                display: 'flex', 
-                                alignItems: 'center', 
-                                justifyContent: 'center',
-                                gap: '10px', 
-                                padding: '14px', 
-                                borderRadius: '8px', 
-                                backgroundColor: '#2e7d32', // Solid green for action
-                                fontWeight: 'bold',
-                                boxShadow: '0 4px 6px rgba(0,0,0,0.1)'
-                            }}
+                            to={`/lecturer/class/${classId}/${item.path}`} 
+                            className="classroom-manager-menu-link"
                         >
-                            NEW ASSESSMENT
+                            <span className="classroom-manager-menu-icon">{item.icon}</span>
+                            <span className="classroom-manager-menu-text">{item.name}</span>
                         </Link>
                     </li>
-                </ul>
+                ))}
+
+                <hr className="classroom-manager-divider" />
+
+                {/* ACTIONS */}
+                <li>
+                    <Link 
+                        to={`/lecturer/class/${classId}/create-quiz`} 
+                        className="classroom-manager-action-link"
+                    >
+                        NEW ASSESSMENT
+                    </Link>
+                </li>
+            </ul>
+                </div>
             </nav>
 
             {/* RIGHT CONTENT AREA */}
-            <main style={{ flex: 1, padding: '40px', overflowY: 'auto' }}>
-                <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
-                    <div style={{ backgroundColor: 'white', padding: '40px', borderRadius: '15px', boxShadow: '0 4px 20px rgba(0,0,0,0.08)', minHeight: '80vh' }}>
-                        <Outlet /> 
+            <main className="classroom-manager-content">
+                <div className="classroom-manager-content-wrapper">
+                    <div className="classroom-manager-panel">
+                        <Outlet />
                     </div>
                 </div>
             </main>

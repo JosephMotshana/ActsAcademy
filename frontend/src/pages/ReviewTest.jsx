@@ -111,7 +111,7 @@ const ReviewTest = ({ user }) => {
                                                 </p>
                                             )}
                                             <div style={{ marginTop: '15px', display: 'flex', alignItems: 'center', gap: '5px', fontWeight: 'bold', color: isCorrect ? '#2e7d32' : '#d32f2f' }}>
-                                                {isCorrect ? '✅ Correct' : '❌ Incorrect'}
+                                                {isCorrect ? ' Correct' : ' Incorrect'}
                                             </div>
                                         </>
                                     ) : (
@@ -119,7 +119,7 @@ const ReviewTest = ({ user }) => {
                                             marginTop: '15px', paddingTop: '10px', borderTop: '1px solid #eee',
                                             color: '#1a237e', fontWeight: 'bold' 
                                         }}>
-                                            {isPending ? '⏳ Waiting for Lecturer to mark...' : `🎯 Marks Awarded: ${q.marks_awarded}`}
+                                            {isPending ? ' Waiting for Lecturer to mark...' : ` Marks Awarded: ${q.marks_awarded}`}
                                         </div>
                                     )}
                                 </div>

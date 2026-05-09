@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useParams, useNavigate } from 'react-router-dom';
+import '../../style/global.css';
 
 const ManageQuizzes = () => {
     const { classId } = useParams();
@@ -33,53 +34,53 @@ const ManageQuizzes = () => {
         }
     };
 
-    if (loading) return <p style={{ textAlign: 'center', padding: '50px' }}>Loading assessments...</p>;
+    if (loading) return <p className="loading-text">Loading assessments...</p>;
 
     return (
-        <div style={{ padding: '30px', maxWidth: '900px', margin: '0 auto' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-                <div>
-                    <h2 style={{ color: '#1a237e', margin: 0 }}>📝 Manage Assessments</h2>
-                    <p style={{ margin: '5px 0 0 0', color: '#666' }}>View, edit, or remove assessments for this class.</p>
+        <div className="manage-quizzes-container">
+            <div className="manage-header">
+                <div className="header-text">
+                    <h2 className="manage-title">Manage Assessments</h2>
+                    <p className="manage-subtitle">View, edit, or remove assessments for this class.</p>
                 </div>
                 <button 
-                    onClick={() => navigate(`/lecturer/class/${classId}/create-quiz`)} 
-                    style={btnStyle}
+                    className="btn-create-new"
+                    onClick={() => navigate(`/lecturer/class/${classId}/create-quiz`)}
                 >
                     + Create New
                 </button>
             </div>
 
-            <div style={{ marginTop: '20px' }}>
+            <div className="quizzes-list-wrapper">
                 {quizzes.length === 0 ? (
-                    <div style={{ textAlign: 'center', padding: '40px', background: '#f8f9fa', borderRadius: '10px', border: '1px dashed #ccc' }}>
+                    <div className="empty-state">
                         <p>No assessments found for this classroom.</p>
                         <button 
-                            onClick={() => navigate(`/lecturer/class/${classId}/create-quiz`)} 
-                            style={btnStyle}
+                            className="btn-empty-create"
+                            onClick={() => navigate(`/lecturer/class/${classId}/create-quiz`)}
                         >
                             + Create Your First Quiz
                         </button>
                     </div>
                 ) : (
                     quizzes.map(q => (
-                        <div key={q.id} style={cardStyle}>
-                            <div>
-                                <h3 style={{ margin: '0 0 5px 0', color: '#333' }}>{q.title}</h3>
-                                <small style={{ color: '#888' }}>
+                        <div key={q.id} className="quiz-list-item">
+                            <div className="quiz-info">
+                                <h3 className="quiz-item-title">{q.title}</h3>
+                                <small className="quiz-meta">
                                     ID: {q.id} | Created: {new Date(q.created_at).toLocaleDateString()}
                                 </small>
                             </div>
-                            <div style={{ display: 'flex', gap: '10px' }}>
+                            <div className="quiz-actions">
                                 <button 
-                                    onClick={() => navigate(`/lecturer/class/${classId}/edit-quiz/${q.id}`)} 
-                                    style={{ ...btnStyle, backgroundColor: '#4caf50' }}
+                                    className="btn-edit"
+                                    onClick={() => navigate(`/lecturer/class/${classId}/edit-quiz/${q.id}`)}
                                 >
                                     Edit
                                 </button>
                                 <button 
-                                    onClick={() => handleDelete(q.id)} 
-                                    style={{ ...btnStyle, backgroundColor: '#d32f2f' }}
+                                    className="btn-delete"
+                                    onClick={() => handleDelete(q.id)}
                                 >
                                     Delete
                                 </button>
@@ -90,31 +91,6 @@ const ManageQuizzes = () => {
             </div>
         </div>
     );
-};
-
-// --- STYLES ---
-
-const cardStyle = {
-    background: 'white',
-    padding: '20px',
-    borderRadius: '10px',
-    boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
-    marginBottom: '15px',
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    borderLeft: '5px solid #1a237e'
-};
-
-const btnStyle = {
-    padding: '10px 20px',
-    color: 'white',
-    border: 'none',
-    borderRadius: '5px',
-    cursor: 'pointer',
-    backgroundColor: '#1a237e',
-    fontWeight: 'bold',
-    transition: 'opacity 0.2s'
 };
 
 export default ManageQuizzes;
