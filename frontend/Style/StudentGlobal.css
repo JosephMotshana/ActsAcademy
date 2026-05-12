@@ -1,0 +1,1093 @@
+/* --- Refined Review Page (Geometric & Professional) --- */
+
+.review-page-wrapper {
+    padding: 60px 20px;
+    background-color: #f4f7f9;
+    min-height: 100vh;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.review-content-container {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+/* Navigation */
+.btn-back-nav {
+    background-color: transparent;
+    border: 1px solid #1a305e;
+    color: #1a305e;
+    padding: 8px 16px;
+    cursor: pointer;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 30px;
+    font-size: 0.8rem;
+    transition: all 0.2s ease;
+}
+
+.btn-back-nav:hover {
+    background-color: #1a305e;
+    color: #ffffff;
+}
+
+/* Updated Summary Card: Navy Background & Rounded Edges */
+.review-summary-card {
+    background-color: #1a305e; /* Midnight Navy */
+    color: #ffffff;
+    padding: 40px;
+    border-radius: 20px; /* Rounded Edges */
+    margin-bottom: 50px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 10px 25px rgba(26, 48, 94, 0.2);
+}
+
+.summary-title {
+    color: #ffffff; /* White for readability on Navy */
+    font-size: 1.8rem;
+    margin: 0;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.summary-date {
+    color: rgba(255, 255, 255, 0.7); /* Subtle white */
+    margin-top: 5px;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Score Section inside the Navy Card */
+.summary-score-section {
+    background-color: rgba(255, 255, 255, 0.1); /* Subtle contrast */
+    color: #ffffff;
+    width: 200px;
+    height: 120px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border-radius: 15px; /* Rounded inside box */
+    border: 1px solid #c5a059; /* Gold border */
+}
+
+.summary-score-value {
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: #c5a059; /* Gold Percentage */
+}
+
+.summary-score-label {
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #ffffff;
+}
+
+/* Questions List */
+.review-questions-list {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+}
+
+.review-question-card {
+    background-color: #ffffff;
+    border: 1px solid #e1e8ed;
+    padding: 40px;
+    position: relative;
+    /* Questions remain sharp/square per previous dashboard format */
+}
+
+.review-question-card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+}
+
+.review-question-card.correct::before { background-color: #1a305e; } 
+.review-question-card.incorrect::before { background-color: #c5a059; } 
+.review-question-card.essay::before { background-color: #5a6a85; }
+
+.question-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 25px;
+}
+
+.question-number {
+    color: #1a305e;
+    font-weight: 800;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+}
+
+.question-type-tag {
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: #5a6a85;
+}
+
+.question-text-heading {
+    color: #1a305e;
+    font-size: 1.15rem;
+    font-weight: 600;
+    line-height: 1.6;
+    margin-bottom: 30px;
+}
+
+/* Answer Boxes */
+.answer-review-box {
+    padding: 20px 0;
+    border-top: 1px solid #f0f0f0;
+}
+
+.user-answer-text {
+    font-weight: 700;
+    color: #1a305e;
+    margin-left: 8px;
+}
+
+.correct-answer-row {
+    margin-top: 10px;
+    font-size: 0.9rem;
+    color: #5a6a85;
+    padding: 10px;
+    background: #f8fafd;
+    border-left: 2px solid #c5a059;
+}
+
+.mcq-status-badge {
+    margin-top: 15px;
+    font-size: 0.8rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.mcq-status-badge.correct { color: #1a305e; }
+.mcq-status-badge.incorrect { color: #c5a059; }
+
+.essay-marks-row {
+    margin-top: 20px;
+    color: #c5a059;
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+}
+/* --- Student Dashboard Styles --- */
+
+.dashboard-wrapper {
+    padding: 60px 20px;
+    background-color: #f4f7f9;
+    min-height: 100vh;
+}
+
+.dashboard-title {
+    color: #1a305e;
+    font-size: 2.2rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 40px;
+    border-bottom: 2px solid #e1e8ed;
+    padding-bottom: 10px;
+}
+
+/* Grid Layout */
+.classroom-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 30px;
+}
+
+/* Classroom Card - Sharp & Professional */
+.classroom-card {
+    background-color: #ffffff;
+    border: 1px solid #e1e8ed;
+    padding: 30px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 200px;
+    position: relative;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.classroom-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 20px rgba(26, 48, 94, 0.1);
+    border-color: #1a305e;
+}
+
+/* Subtle brand accent on card hover */
+.classroom-card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 0;
+    background-color:white;
+    transition: height 0.3s ease;
+}
+
+.classroom-card:hover::before {
+    height: 4px;
+}
+
+.classroom-name {
+    color: #1a305e;
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin: 0 0 10px 0;
+    text-transform: uppercase;
+}
+
+.lecturer-info {
+    color: #5a6a85;
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin-bottom: 20px;
+}
+
+/* Button - Following the Navy/Gold theme */
+.btn-enter-class {
+    background-color: #1a305e;
+    color: #ffffff;
+    border: none;
+    padding: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    width: 100%;
+    margin-top: auto;
+}
+
+.btn-enter-class:hover {
+    background-color: #c5a059; /* Switches to Gold on hover */
+    color: #1a305e;
+}
+
+/* Empty State */
+.empty-dashboard-state {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 100px 20px;
+    background: #ffffff;
+    border: 2px dashed #e1e8ed;
+}
+
+.empty-dashboard-state h3 {
+    color: #1a305e;
+    text-transform: uppercase;
+}
+
+.empty-dashboard-state p {
+    color: #5a6a85;
+}
+
+/* --- Student History Styles --- */
+
+.history-container {
+    padding: 40px;
+    background-color: #f4f7f9;
+    min-height: 100vh;
+}
+
+.history-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 30px;
+    border-bottom: 2px solid #e1e8ed;
+    padding-bottom: 15px;
+}
+
+.history-title {
+    color: #1a305e;
+    font-size: 2rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin: 0;
+}
+
+.assessment-counter {
+    color: #5a6a85;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+    letter-spacing: 0.5px;
+}
+
+/* Table Styling */
+.history-table-wrapper {
+    background-color: #ffffff;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    border: 1px solid #e1e8ed;
+}
+
+.history-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+.history-table th {
+    background-color: #1a305e;
+    color: #ffffff;
+    padding: 15px 20px;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    letter-spacing: 1px;
+}
+
+.history-table td {
+    padding: 20px;
+    border-bottom: 1px solid #f0f3f5;
+    color: #1a305e;
+    font-size: 0.95rem;
+}
+
+.history-row:hover {
+    background-color: #f8fafd;
+}
+
+.col-title {
+    font-weight: 700;
+}
+
+.col-date {
+    color: #5a6a85;
+}
+
+/* Score Visuals */
+.score-circle {
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 0.9rem;
+    border-radius: 50%; /* Using a circle here to make scores pop, or remove for square */
+    margin: 0 auto;
+}
+
+.score-circle.fail {
+    border: 2px solid #1a305e;
+    background-color: #f0f4ff;
+    color: #1a305e;
+}
+
+.score-circle.pass {
+    border: 2px solid #c5a059;
+    background-color: #fff9eb;
+    color: #c5a059;
+}
+
+/* Badges & Status */
+.badge-pending {
+    background-color: #f4f7f9;
+    color: #5a6a85;
+    padding: 6px 12px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    border: 1px solid #e1e8ed;
+}
+
+.status-awaiting {
+    font-style: italic;
+    color: #94a3b8;
+    font-size: 0.85rem;
+}
+
+/* Action Button */
+.btn-review-results {
+    background-color: #1a305e;
+    color: #ffffff;
+    border: none;
+    padding: 10px 24px; /* Slightly more horizontal padding looks better with rounded edges */
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    
+    /* Round Edges */
+    border-radius: 25px; 
+}
+
+.btn-review-results:hover {
+    background-color: #c5a059;
+    color: #1a305e;
+    /* Subtle lift effect to match the dashboard feel */
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Empty State */
+.empty-history-cell {
+    text-align: center;
+    padding: 60px !important;
+    color: #5a6a85;
+    font-style: italic;
+}
+
+.history-loading-text {
+    text-align: center;
+    padding: 100px;
+    color: #1a305e;
+    text-transform: uppercase;
+    font-weight: 700;
+}
+
+.text-center {
+    text-align: center;
+}
+
+/* --- Student Live Hall Styles --- */
+
+.live-hall-container {
+    padding: 60px 20px;
+    background-color: #f4f7f9;
+    min-height: 80vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.live-hall-title {
+    color: #1a305e;
+    font-size: 2rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-bottom: 40px;
+    text-align: center;
+}
+
+/* Live Session Card - Midnight Navy & Rounded Edges */
+.live-session-card {
+    background-color: #1a305e;
+    color: #ffffff;
+    width: 100%;
+    max-width: 500px;
+    padding: 50px 40px;
+    border-radius: 20px;
+    text-align: center;
+    box-shadow: 0 15px 35px rgba(26, 48, 94, 0.2);
+    border-bottom: 5px solid #c5a059; /* Gold Accent Base */
+}
+
+.live-start-time {
+    margin-bottom: 35px;
+    font-size: 1.2rem;
+    line-height: 1.6;
+}
+
+.start-label {
+    color: #c5a059; /* Gold */
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    letter-spacing: 2px;
+}
+
+/* Join Button - Pill Shaped */
+.btn-join-meet {
+    display: inline-block;
+    background-color: #c5a059;
+    color: #1a305e;
+    padding: 16px 40px;
+    border-radius: 50px;
+    text-decoration: none;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+}
+
+.btn-join-meet:hover {
+    background-color: #ffffff;
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* No Class Scheduled State */
+.no-live-class-box {
+    background-color: #ffffff;
+    border: 1px solid #e1e8ed;
+    padding: 60px 40px;
+    max-width: 500px;
+    width: 100%;
+    text-align: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.no-live-text {
+    color: #5a6a85;
+    font-size: 1.1rem;
+    margin-bottom: 30px;
+}
+
+/* Refresh Button - Outline Style */
+.btn-refresh-status {
+    background-color: transparent;
+    border: 2px solid #1a305e;
+    color: #1a305e;
+    padding: 12px 30px;
+    border-radius: 50px;
+    font-weight: 700;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-refresh-status:hover {
+    background-color: #1a305e;
+    color: #ffffff;
+}
+
+.live-loading-text {
+    text-align: center;
+    padding-top: 100px;
+    color: #1a305e;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+/* --- Student Materials Styles --- */
+
+.materials-page-container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 60px 20px;
+}
+
+.materials-title {
+    color: #1a305e;
+    font-size: 2rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 30px;
+    border-bottom: 2px solid #e1e8ed;
+    padding-bottom: 10px;
+}
+
+.materials-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 30px;
+}
+
+/* Material Card - Geometric Style */
+.material-card {
+    background-color: #ffffff;
+    border: 1px solid #e1e8ed;
+    padding: 25px;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.material-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 15px;
+}
+
+.material-item-title {
+    margin: 0;
+    color: #1a305e;
+    font-size: 1.1rem;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.material-type-badge {
+    font-size: 0.7rem;
+    font-weight: 800;
+    color: #5a6a85;
+    text-transform: uppercase;
+    background: #f4f7f9;
+    padding: 2px 8px;
+    border: 1px solid #e1e8ed;
+}
+
+/* Preview Box */
+.material-preview-box {
+    margin: 15px 0;
+    background: #f8fafd;
+    border: 1px solid #f0f3f5;
+    height: 180px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.preview-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.preview-video {
+    width: 100%;
+    height: 100%;
+}
+
+.preview-placeholder {
+    font-weight: 600;
+    color: #5a6a85;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+}
+
+/* Actions & Buttons */
+.material-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: auto;
+}
+
+.btn-material {
+    flex: 1;
+    text-align: center;
+    padding: 10px;
+    font-size: 0.75rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border-radius: 50px; /* Consistent with your other action buttons */
+}
+
+.btn-navy {
+    background-color: #1a305e;
+    color: #ffffff;
+    border: none;
+}
+
+.btn-gold {
+    background-color: #c5a059;
+    color: #1a305e;
+    border: none;
+}
+
+.btn-gold-outline {
+    background-color: transparent;
+    border: 1.5px solid #c5a059;
+    color: #c5a059;
+}
+
+.btn-material:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.materials-loading {
+    text-align: center;
+    padding: 100px;
+    color: #1a305e;
+    text-transform: uppercase;
+    font-weight: 700;
+}
+
+/* --- Student Progress Styles --- */
+
+.progress-container {
+    padding: 60px 40px;
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+.progress-title {
+    color: #1a305e;
+    font-size: 2.2rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 40px;
+    border-bottom: 1px solid #e1e8ed;
+    padding-bottom: 20px;
+}
+
+.progress-table-wrapper {
+    background-color: #ffffff;
+    border: 1px solid #e1e8ed;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+    overflow: hidden; /* Keeps the top header corners clean */
+}
+
+.progress-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+.progress-table th {
+    background-color: #1a305e;
+    color: #ffffff;
+    padding: 20px;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    letter-spacing: 1.5px;
+    font-weight: 700;
+}
+
+.progress-table td {
+    padding: 24px 20px; /* Increased padding for that "uncongested" feel */
+    border-bottom: 1px solid #f0f3f5;
+    color: #1a305e;
+    font-size: 1rem;
+}
+
+.progress-row:hover {
+    background-color: #fcfdfe;
+}
+
+.col-name {
+    font-weight: 600;
+}
+
+.col-points {
+    font-weight: 700;
+    color: #c5a059; /* Academy Gold for the score data */
+}
+
+/* Rounded Action Button */
+.btn-mark-test {
+    background-color: #1a305e;
+    color: #ffffff;
+    border: none;
+    padding: 10px 24px;
+    border-radius: 50px; /* Consistent Pill Shape */
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-mark-test:hover {
+    background-color: #c5a059;
+    color: #1a305e;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.empty-state-cell {
+    text-align: center;
+    padding: 80px !important;
+    color: #5a6a85;
+    font-style: italic;
+    letter-spacing: 1px;
+}
+
+/* Helper Class */
+.text-center {
+    text-align: center;
+}
+
+/* --- Student Tests Styles --- */
+
+.tests-page-container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 60px 20px;
+}
+
+.tests-main-title {
+    color: #1a305e;
+    font-size: 2.2rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+}
+
+.tests-subtitle {
+    color: #5a6a85;
+    margin-bottom: 40px;
+    font-size: 1rem;
+}
+
+.tests-list-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* Test Card - Professional & Spaced */
+.test-assignment-card {
+    background-color: #ffffff;
+    border: 1px solid #e1e8ed;
+    padding: 30px;
+    border-radius: 15px; /* Rounded card edges */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+    transition: transform 0.2s ease;
+}
+
+.test-assignment-card:hover {
+    transform: scale(1.01);
+    border-color: #1a305e;
+}
+
+.test-item-title {
+    margin: 0 0 10px 0;
+    color: #1a305e;
+    font-size: 1.3rem;
+    font-weight: 700;
+}
+
+.test-meta-tags {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+
+.test-date-tag {
+    font-size: 0.75rem;
+    color: #5a6a85;
+    background-color: #f4f7f9;
+    padding: 4px 12px;
+    border-radius: 6px;
+    text-transform: uppercase;
+    font-weight: 600;
+}
+
+.test-status-ready {
+    font-size: 0.75rem;
+    color: #c5a059; /* Academy Gold */
+    font-weight: 800;
+    text-transform: uppercase;
+}
+
+/* Start Button - Pill Shaped */
+.btn-start-assessment {
+    padding: 14px 35px;
+    background-color: #1a305e;
+    color: #ffffff;
+    border: none;
+    border-radius: 50px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-start-assessment:hover:not(:disabled) {
+    background-color: #c5a059;
+    color: #1a305e;
+    box-shadow: 0 5px 15px rgba(197, 160, 89, 0.3);
+}
+
+.btn-start-assessment:disabled {
+    background-color: #cbd5e1;
+    cursor: not-allowed;
+}
+
+/* Empty State Styling */
+.tests-empty-state {
+    text-align: center;
+    padding: 80px 40px;
+    background-color: #ffffff;
+    border-radius: 20px;
+    border: 2px dashed #e1e8ed;
+}
+
+.empty-title {
+    color: #1a305e;
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+}
+
+.empty-text {
+    color: #5a6a85;
+}
+
+.tests-loading {
+    text-align: center;
+    padding: 100px;
+    color: #1a305e;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+/* Responsive Fix for small screens */
+@media (max-width: 600px) {
+    .test-assignment-card {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .btn-start-assessment {
+        width: 100%;
+        margin-top: 15px;
+    }
+}
+
+/* --- Take Test Styles --- */
+
+.take-test-container {
+    padding: 60px 20px;
+    max-width: 850px;
+    margin: 0 auto;
+}
+
+.take-test-title {
+    color: #1a305e;
+    font-size: 2.2rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 40px;
+    text-align: center;
+}
+
+.test-status-msg {
+    padding: 100px;
+    text-align: center;
+    color: #1a305e;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+/* Question Card */
+.question-card {
+    background: white;
+    padding: 40px;
+    border-radius: 20px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+    margin-bottom: 30px;
+    border-left: 8px solid #1a305e; /* Brand Navy accent */
+}
+
+.question-text {
+    color: #1a305e;
+    font-size: 1.25rem;
+    margin-bottom: 25px;
+    line-height: 1.5;
+}
+
+/* MCQ Options */
+.options-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 15px;
+}
+
+.option-box {
+    padding: 18px 25px;
+    border-radius: 12px;
+    border: 2px solid #e1e8ed;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    transition: all 0.2s ease;
+    font-weight: 500;
+    color: #5a6a85;
+}
+
+.option-box:hover {
+    background-color: #f8fafd;
+    border-color: #cbd5e1;
+}
+
+.option-box.selected {
+    background-color: #f0f4ff;
+    border-color: #1a305e;
+    color: #1a305e;
+}
+
+.option-letter {
+    font-weight: 800;
+    margin-right: 12px;
+}
+
+/* Custom Radio Appearance */
+.radio-circle {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 2px solid #ccc;
+    margin-right: 15px;
+    flex-shrink: 0;
+    transition: all 0.2s ease;
+}
+
+.radio-circle.selected {
+    background-color: #1a305e;
+    border-color: #1a305e;
+    box-shadow: inset 0 0 0 4px #f0f4ff;
+}
+
+/* Essay Input */
+.essay-input {
+    width: 100%;
+    min-height: 150px;
+    padding: 20px;
+    border-radius: 12px;
+    border: 2px solid #e1e8ed;
+    font-size: 1rem;
+    font-family: inherit;
+    resize: vertical;
+    transition: border-color 0.2s;
+}
+
+.essay-input:focus {
+    outline: none;
+    border-color: #1a305e;
+}
+
+/* Huge Pill-Shaped Submit Button */
+.btn-submit-assessment {
+    width: 100%;
+    padding: 20px;
+    background-color: #1a305e; /* Navy for primary action */
+    color: white;
+    border: none;
+    border-radius: 50px;
+    font-size: 1.1rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    cursor: pointer;
+    margin-top: 30px;
+    transition: all 0.3s ease;
+}
+
+.btn-submit-assessment:hover {
+    background-color: #c5a059; /* Switches to Gold on hover */
+    color: #1a305e;
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px rgba(197, 160, 89, 0.3);
+}

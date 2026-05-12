@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
+import '../../style/StudentGlobal.css';
 
 const StudentLive = () => {
     const { classId } = useParams();
@@ -9,7 +10,6 @@ const StudentLive = () => {
 
     const fetchSession = async () => {
         try {
-            // Ensure this endpoint exists in your backend or use the admin/lecturer one if public
             const res = await axios.get(`http://localhost:5000/api/admin/classroom/${classId}`);
             setSession(res.data);
         } catch (err) {
@@ -21,7 +21,6 @@ const StudentLive = () => {
 
     useEffect(() => {
         fetchSession();
-        // Optional: Refresh every 30 seconds to catch new links automatically
         const interval = setInterval(fetchSession, 30000);
         return () => clearInterval(interval);
     }, [classId]);
@@ -39,25 +38,18 @@ const StudentLive = () => {
         });
     };
 
-    if (loading) return <p style={{ textAlign: 'center', marginTop: '50px' }}>Loading classroom...</p>;
+    if (loading) return <p className="live-loading-text">Loading classroom...</p>;
 
     return (
-        <div style={{ textAlign: 'center', padding: '50px', maxWidth: '600px', margin: '0 auto' }}>
-            <h2 style={{ color: '#1a237e' }}> {session?.classroomname || 'Classroom'} Live Hall</h2>
+        <div className="live-hall-container">
+            <h2 className="live-hall-title"> 
+                {session?.classroomname || 'Classroom'} Live Hall
+            </h2>
             
             {session?.live_link ? (
-                <div style={{ 
-                    backgroundColor: '#f0f4ff', 
-                    padding: '40px', 
-                    borderRadius: '20px', 
-                    border: '2px solid #1a237e',
-                    boxShadow: '0 10px 20px rgba(0,0,0,0.1)' 
-                }}>
-                    <div style={{ marginBottom: '20px' }}>
-                    </div>
-
-                    <p style={{ fontSize: '1.4rem', color: '#333', marginBottom: '25px' }}>
-                        <strong>Starts:</strong> <br/>
+                <div className="live-session-card">
+                    <p className="live-start-time">
+                        <strong className="start-label">Starts:</strong> <br/>
                         {formatDisplayTime(session.scheduled_time)}
                     </p>
 
@@ -65,29 +57,19 @@ const StudentLive = () => {
                         href={session.live_link} 
                         target="_blank" 
                         rel="noreferrer" 
-                        style={{ 
-                            display: 'inline-block', 
-                            padding: '18px 50px', 
-                            backgroundColor: '#4caf50', 
-                            color: 'white', 
-                            borderRadius: '12px', 
-                            textDecoration: 'none', 
-                            fontWeight: 'bold',
-                            fontSize: '1.2rem',
-                            boxShadow: '0 4px 10px rgba(76, 175, 80, 0.3)'
-                        }}
+                        className="btn-join-meet"
                     >
                         Join Google Meet
                     </a>
                 </div>
             ) : (
-                <div style={{ padding: '40px', background: '#f9f9f9', borderRadius: '20px', border: '1px solid #ddd' }}>
-                    <p style={{ fontSize: '1.2rem', color: '#888' }}>
+                <div className="no-live-class-box">
+                    <p className="no-live-text">
                         No classes are currently scheduled for this classroom.
                     </p>
                     <button 
                         onClick={fetchSession}
-                        style={{ marginTop: '15px', background: 'none', border: '1px solid #1a237e', color: '#1a237e', padding: '8px 20px', borderRadius: '5px', cursor: 'pointer' }}
+                        className="btn-refresh-status"
                     >
                         Refresh Status
                     </button>

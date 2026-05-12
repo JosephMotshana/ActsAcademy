@@ -4,6 +4,7 @@ import { useParams, Link, Outlet } from 'react-router-dom';
 const StudentClassManager = () => {
     const { classId } = useParams();
 
+
     return (
         <div style={{ display: 'flex', minHeight: '100vh' }}>
             <nav style={{ width: '250px', backgroundColor: '#37474f', color: 'white', padding: '20px' }}>
