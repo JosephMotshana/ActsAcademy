@@ -65,8 +65,8 @@
 .summary-score-section {
     background-color: rgba(255, 255, 255, 0.1); /* Subtle contrast */
     color: #ffffff;
-    width: 200px;
-    height: 120px;
+    width: 250px;
+    height: 200px;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -76,8 +76,8 @@
 }
 
 .summary-score-value {
-    font-size: 2.2rem;
-    font-weight: 700;
+    font-size: 1.5rem;
+    font-weight: 600;
     color: #c5a059; /* Gold Percentage */
 }
 
@@ -1090,4 +1090,382 @@
     color: #1a305e;
     transform: translateY(-3px);
     box-shadow: 0 10px 20px rgba(197, 160, 89, 0.3);
+}
+
+/* --- Classroom Manager Shared Layout --- */
+
+.classroom-manager-layout {
+    display: flex;
+    min-height: 100vh;
+    background-color: #f4f7f9;
+}
+
+/* Sidebar Styling */
+.classroom-manager-sidebar {
+    width: 280px;
+    background-color: #14264a; /* Navy */
+    color: #ffffff;
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+    transition: all 0.3s ease;
+    z-index: 100;
+}
+
+.classroom-manager-sidebar-header {
+    padding: 20px;
+    background-color: #14264a;
+}
+
+.classroom-manager-back-button {
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: #ffffff;
+    padding: 8px 15px;
+    border-radius: 50px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    font-weight: 600;
+    transition: all 0.2s;
+}
+
+.classroom-manager-back-button:hover {
+    background-color: #c5a059;
+    border-color: #c5a059;
+    color: #1a305e;
+}
+
+.classroom-manager-title {
+    padding: 30px 25px 10px 25px;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: #c5a059; /* Gold */
+    font-weight: 800;
+}
+
+/* Menu Links */
+.classroom-manager-menu {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.classroom-manager-menu-link {
+    display: flex;
+    align-items: center;
+    padding: 18px 25px;
+    color: rgba(255, 255, 255, 0.8);
+    text-decoration: none;
+    font-weight: 600;
+    border-left: 4px solid transparent;
+    transition: all 0.2s;
+}
+
+.classroom-manager-menu-link:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+    color: #ffffff;
+    border-left: 4px solid #c5a059;
+}
+
+/* Content Area */
+.classroom-manager-content {
+    flex-grow: 1;
+    overflow-y: auto;
+    padding: 40px;
+}
+
+.classroom-manager-content-wrapper {
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+.classroom-manager-panel {
+    background: #ffffff;
+    min-height: 80vh;
+    border-radius: 15px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    padding: 40px;
+}
+
+/* Mobile Responsiveness */
+.classroom-manager-hamburger-button {
+    display: none;
+}
+
+@media (max-width: 768px) {
+    .classroom-manager-layout {
+        flex-direction: column;
+    }
+
+    .classroom-manager-sidebar {
+        width: 100%;
+    }
+
+    .classroom-manager-hamburger-button {
+        display: block;
+        background: none;
+        border: none;
+        color: white;
+        font-size: 1.2rem;
+        float: right;
+        cursor: pointer;
+    }
+
+    .classroom-manager-menu-hidden {
+        display: none;
+    }
+
+    .classroom-manager-menu-visible {
+        display: block;
+    }
+}
+/* --- Register Card Enhancements --- */
+
+.register-card {
+    max-width: 650px; /* Wider for the side-by-side inputs */
+}
+
+/* Form Row for Side-by-Side inputs */
+.form-row {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 5px;
+}
+
+.form-row .form-group {
+    flex: 1; /* Makes both inputs take equal width */
+}
+
+/* Mobile Responsive: Stack them on small screens */
+@media (max-width: 600px) {
+    .form-row {
+        flex-direction: column;
+        gap: 0;
+    }
+    
+    .register-card {
+        padding: 30px 20px;
+    }
+}
+
+/* Label visual tweak for professional look */
+.login-label {
+    color: #1a305e;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+/* --- Login Page Styles --- */
+
+.login-page-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #f4f7f9; /* Soft background to reduce eye strain */
+    padding: 20px;
+}
+
+.login-card {
+    background: #ffffff;
+    width: 100%;
+    max-width: 450px;
+    padding: 50px;
+    border-radius: 20px;
+    box-shadow: 0 15px 35px rgba(26, 48, 94, 0.1);
+    text-align: center;
+}
+
+.login-header {
+    margin-bottom: 40px;
+}
+
+.login-logo-placeholder {
+    font-size: 1.5rem;
+    font-weight: 900;
+    color: #1a305e;
+    letter-spacing: 3px;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #c5a059; /* Gold accent */
+    display: inline-block;
+    padding-bottom: 5px;
+}
+
+.login-welcome-text {
+    color: #1a305e;
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+.login-subtitle {
+    color: #5a6a85;
+    font-size: 0.9rem;
+}
+
+/* Form Styling */
+.login-form {
+    text-align: left;
+}
+
+.form-group {
+    margin-bottom: 25px;
+}
+
+.login-label {
+    display: block;
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: #1a305e;
+    margin-bottom: 8px;
+    letter-spacing: 1px;
+}
+
+.login-input {
+    width: 100%;
+    padding: 14px 18px;
+    border: 2px solid #e1e8ed;
+    border-radius: 12px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    box-sizing: border-box;
+}
+
+.login-input:focus {
+    outline: none;
+    border-color: #1a305e;
+    background-color: #f8fafd;
+}
+
+/* Login Button - Strong Brand Style */
+.btn-login-submit {
+    width: 100%;
+    padding: 16px;
+    background-color: #1a305e;
+    color: white;
+    border: none;
+    border-radius: 50px; /* Pill shape */
+    font-size: 1rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: all 0.3s ease;
+}
+
+.btn-login-submit:hover {
+    background-color: #c5a059; /* Gold */
+    color: #1a305e;
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px rgba(197, 160, 89, 0.2);
+}
+
+.login-footer {
+    margin-top: 40px;
+    border-top: 1px solid #f0f3f5;
+    padding-top: 20px;
+}
+
+.login-footer p {
+    font-size: 0.7rem;
+    color: #cbd5e1;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+/* --- Login Registration Prompt --- */
+
+.login-registration-prompt {
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px dashed #e1e8ed;
+}
+
+.login-registration-prompt p {
+    color: #5a6a85;
+    font-size: 0.9rem;
+    margin-bottom: 10px;
+}
+
+.btn-register-link {
+    display: inline-block;
+    color: #1a305e;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: all 0.2s ease;
+}
+
+.btn-register-link:hover {
+    color: #c5a059; /* Academy Gold */
+    transform: translateY(-1px);
+}
+
+/* --- Registration & Role Selection --- */
+
+/* Success State Icon */
+.success-icon {
+    font-size: 4rem;
+    margin-bottom: 20px;
+    display: block;
+}
+
+/* Dropdown Styling */
+select.login-input {
+    appearance: none; /* Removes default browser styling */
+    background-color: #ffffff;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%231a305e' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 1.2rem center;
+    background-size: 1em;
+    cursor: pointer;
+    padding-right: 40px; /* Space for the arrow */
+}
+
+select.login-input:focus {
+    border-color: #c5a059; /* Gold focus for the selection */
+}
+
+/* Registration Form spacing adjustment */
+.login-card {
+    transition: max-width 0.4s ease;
+}
+
+/* On registration, we give it a tiny bit more width to keep fields roomy */
+.register-mode .login-card {
+    max-width: 500px; 
+}
+
+/* Form Helper Text */
+.form-helper {
+    font-size: 0.75rem;
+    color: #8898aa;
+    margin-top: -15px;
+    margin-bottom: 20px;
+    display: block;
+}
+
+/* Success Message Text */
+.login-subtitle strong {
+    color: #1a305e;
+    border-bottom: 1px solid #c5a059;
+}
+
+/* Desktop spacing fix for the longer form */
+@media (min-height: 900px) {
+    .login-page-wrapper {
+        align-items: center;
+    }
+}
+
+@media (max-height: 899px) {
+    .login-page-wrapper {
+        align-items: flex-start; /* Allows scrolling on smaller laptop screens */
+        padding-top: 50px;
+        padding-bottom: 50px;
+    }
 }

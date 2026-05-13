@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Routes, Route, Navigate } from 'react-router-dom';
-
+import { BrowserRouter,Routes, Route, Navigate , Link} from 'react-router-dom';
+// Add this line at the top of App.jsx
+import Register from './pages/Register';
 // Auth & General
 import Login from './pages/Login';
 
@@ -59,12 +60,12 @@ function App() {
             {user && (
                 <nav style={{ 
                     padding: '15px 30px', 
-                    background: '#1a237e', 
+                    background: '#1a305e;', 
                     color: 'white', 
                     display: 'flex', 
                     justifyContent: 'space-between', 
                     alignItems: 'center',
-                    boxShadow: '0 2px 10px rgba(0,0,0,0.2)' 
+                   
                 }}>
                     <span style={{ fontWeight: 'bold', fontSize: '1.2rem', letterSpacing: '1px' }}>
                         ACTS ACADEMY PORTAL
@@ -77,7 +78,7 @@ function App() {
                             onClick={handleLogout} 
                             style={{ 
                                 cursor: 'pointer', 
-                                background: '#f44336', 
+                                background: '#c5a059', 
                                 color: 'white', 
                                 border: 'none', 
                                 padding: '6px 15px', 
@@ -94,6 +95,7 @@ function App() {
             <Routes>
                 {/* 1. AUTH */}
                 <Route path="/" element={!user ? <Login setUser={setUser} /> : <Navigate to={`/${user.role.toLowerCase()}`} />} />
+                <Route path="/register" element={!user ? <Register /> : <Navigate to={`/${user.role.toLowerCase()}`} />} />
 
                 {/* 2. ADMIN */}
                 <Route path="/admin" element={user?.role === 'ADMIN' ? <AdminDashboard /> : <Navigate to="/" />} />
@@ -143,8 +145,11 @@ function App() {
 
                 <Route path="*" element={<Navigate to="/" />} />
             </Routes>
-        </div>
+
+            </div>
     );
+
 }
+
 
 export default App;

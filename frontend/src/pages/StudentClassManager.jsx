@@ -1,29 +1,73 @@
-import React from 'react';
-import { useParams, Link, Outlet } from 'react-router-dom';
+import React, { useState } from 'react';
+import { useParams, Link, Outlet, useNavigate } from 'react-router-dom';
+import '../../style/StudentGlobal.css';
 
 const StudentClassManager = () => {
     const { classId } = useParams();
+    const navigate = useNavigate();
+    const [menuOpen, setMenuOpen] = useState(false);
 
+    // Menu items for the student flow
+    const menuItems = [
+        { name: 'Live Session', path: 'live' },
+        { name: 'Study Materials', path: 'materials' },
+        { name: 'Available Tests', path: 'tests' },
+        { name: 'My Results', path: 'history' }
+    ];
 
     return (
-        <div style={{ display: 'flex', minHeight: '100vh' }}>
-            <nav style={{ width: '250px', backgroundColor: '#37474f', color: 'white', padding: '20px' }}>
-                <Link to="/student" style={{ color: '#cfd8dc', textDecoration: 'none' }}>← Back to Home</Link>
-                <h2 style={{ margin: '20px 0' }}>Classroom</h2>
-                <ul style={{ listStyle: 'none', padding: 0 }}>
-                    <li><Link to="live" style={navStyle}> Live Session</Link></li>
-                    <li><Link to="materials" style={navStyle}> Study Materials</Link></li>
-                    <li><Link to="tests" style={navStyle}> Available Tests</Link></li>
-                    <li><Link to="history" style={navStyle}> My Results</Link></li>
-                </ul>
+        <div className="classroom-manager-layout">
+            {/* LEFT SIDEBAR */}
+            <nav className="classroom-manager-sidebar">
+                <div className="classroom-manager-sidebar-header">
+                    <button 
+                        onClick={() => navigate('/student')} 
+                        className="classroom-manager-back-button"
+                    >
+                        ← My Classes
+                    </button>
+
+                    <button
+                        type="button"
+                        onClick={() => setMenuOpen(prev => !prev)}
+                        className="classroom-manager-hamburger-button"
+                        aria-expanded={menuOpen}
+                    >
+                        ☰ Class Menu
+                    </button>
+                </div>
+
+                <div className={menuOpen ? 'classroom-manager-menu-visible' : 'classroom-manager-menu-hidden'}>
+                    <h2 className="classroom-manager-title">
+                        Classroom
+                    </h2>
+
+                    <ul className="classroom-manager-menu">
+                        {menuItems.map(item => (
+                            <li key={item.path} className="classroom-manager-menu-item">
+                                <Link 
+                                    to={`/student/class/${classId}/${item.path}`} 
+                                    className="classroom-manager-menu-link"
+                                    onClick={() => setMenuOpen(false)} // Auto-close on mobile
+                                >
+                                    <span className="classroom-manager-menu-text">{item.name}</span>
+                                </Link>
+                            </li>
+                        ))}
+                    </ul>
+                </div>
             </nav>
-            <main style={{ flex: 1, padding: '30px', backgroundColor: '#f5f5f5' }}>
-                <Outlet />
+
+            {/* RIGHT CONTENT AREA */}
+            <main className="classroom-manager-content">
+                <div className="classroom-manager-content-wrapper">
+                    <div className="classroom-manager-panel">
+                        <Outlet />
+                    </div>
+                </div>
             </main>
         </div>
     );
 };
-
-const navStyle = { color: 'white', textDecoration: 'none', display: 'block', padding: '10px', borderRadius: '5px', marginBottom: '5px', backgroundColor: 'rgba(255,255,255,0.05)' };
 
 export default StudentClassManager;
