@@ -1154,3 +1154,357 @@
     color: #5a6a85;
     font-style: italic;
 }
+
+/* --- Mobile Responsiveness --- */
+
+@media (max-width: 768px) {
+    /* Global mobile fixes */
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        overflow-x: hidden;
+        width: 100%;
+    }
+
+    /* Lecturer Dashboard */
+    .dashboard-container {
+        padding: 20px 15px;
+        max-width: 100%;
+        overflow-x: hidden;
+    }
+
+    .dashboard-header {
+        font-size: 2rem;
+        word-wrap: break-word;
+    }
+
+    .class-grid {
+        grid-template-columns: 1fr;
+        gap: 20px; /* Increased gap */
+        width: 100%;
+    }
+
+    .class-card {
+        padding: 25px; /* Increased padding */
+        width: 100%;
+        min-width: 0; /* Allow shrinking */
+    }
+
+    .class-name {
+        font-size: 1.2rem;
+        word-wrap: break-word;
+    }
+
+    /* Classroom Manager */
+    .classroom-manager-layout {
+        flex-direction: column;
+        width: 100%;
+        overflow-x: hidden;
+    }
+
+    .classroom-manager-sidebar {
+        width: 100%;
+        position: relative;
+        min-width: 0;
+    }
+
+    .classroom-manager-content {
+        padding: 25px 15px; /* Increased padding */
+        width: 100%;
+        overflow-x: hidden;
+    }
+
+    .classroom-manager-panel {
+        padding: 25px; /* Increased padding */
+        min-height: auto;
+        width: 100%;
+        overflow-x: auto; /* Allow horizontal scroll if needed for tables */
+    }
+
+    /* Quiz Editor */
+    .quiz-editor-page {
+        padding: 15px; /* Increased padding */
+        max-width: 100%;
+        overflow-x: hidden;
+    }
+
+    .quiz-editor-title {
+        font-size: 1.5rem;
+        padding-left: 0;
+        word-wrap: break-word;
+    }
+
+    .form-group-title {
+        padding: 20px; /* Increased padding */
+        width: 100%;
+    }
+
+    .question-card {
+        padding: 20px; /* Increased padding */
+        width: 100%;
+        overflow-x: auto;
+    }
+
+    .mcq-options-grid {
+        grid-template-columns: 1fr;
+        gap: 20px; /* Increased gap */
+        width: 100%;
+    }
+
+    .add-question-controls {
+        flex-direction: column;
+        gap: 15px; /* Increased gap */
+        width: 100%;
+    }
+
+    .secondary-btn, .primary-submit-btn {
+        width: 100%;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    /* Live Lesson Manager */
+    .live-manager-container {
+        padding: 15px; /* Increased padding */
+        max-width: 100%;
+        overflow-x: hidden;
+    }
+
+    .live-manager-title {
+        font-size: 1.5rem;
+        word-wrap: break-word;
+    }
+
+    .active-class-card {
+        padding: 20px; /* Increased padding */
+        width: 100%;
+    }
+
+    .card-actions {
+        flex-direction: column;
+        gap: 15px; /* Increased gap */
+        width: 100%;
+    }
+
+    .btn-attend, .btn-remove {
+        width: 100%;
+        text-align: center;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    /* Manage Assessments */
+    .manage-quizzes-container {
+        padding: 15px; /* Increased padding */
+        max-width: 100%;
+        overflow-x: hidden;
+    }
+
+    .manage-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 20px; /* Increased gap */
+        width: 100%;
+    }
+
+    .manage-title {
+        font-size: 1.5rem;
+        word-wrap: break-word;
+    }
+
+    .btn-create-new {
+        width: 100%;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .quiz-list-item {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 20px; /* Increased padding */
+        width: 100%;
+        overflow-x: auto;
+    }
+
+    .quiz-actions {
+        margin-top: 15px; /* Increased margin */
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .btn-edit, .btn-delete {
+        flex: 1;
+        margin: 0 5px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    /* Mark Assessment */
+    .mark-page-container {
+        padding: 20px; /* Increased padding */
+        max-width: 100%;
+        overflow-x: hidden;
+    }
+
+    .mark-page-title {
+        font-size: 1.5rem;
+        word-wrap: break-word;
+    }
+
+    .student-mark-card {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 20px; /* Increased padding */
+        width: 100%;
+        overflow-x: auto;
+    }
+
+    .btn-mark-action {
+        width: 100%;
+        margin-top: 15px; /* Increased margin */
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .submission-card {
+        padding: 20px; /* Increased padding */
+        width: 100%;
+        overflow-x: auto;
+    }
+
+    .marking-input-group {
+        flex-direction: column;
+        align-items: stretch;
+        width: 100%;
+    }
+
+    .score-input {
+        width: 100%;
+    }
+
+    .btn-confirm-mark {
+        width: 100%;
+        margin-top: 15px; /* Increased margin */
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    /* Performance Page */
+    .performance-container {
+        padding: 20px; /* Increased padding */
+        max-width: 100%;
+        overflow-x: hidden;
+    }
+
+    .performance-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px; /* Increased gap */
+        width: 100%;
+    }
+
+    .performance-title {
+        font-size: 1.5rem;
+        word-wrap: break-word;
+    }
+
+    .performance-main-table {
+        font-size: 0.8rem;
+        width: 100%;
+        overflow-x: auto; /* Allow horizontal scroll for table */
+        display: block;
+        white-space: nowrap;
+    }
+
+    .table-header-row th,
+    .student-row td,
+    .inner-header-row th,
+    .inner-body-row td {
+        padding: 12px; /* Increased padding */
+        white-space: nowrap;
+        min-width: 80px; /* Minimum width for readability */
+    }
+
+    .btn-review-mark,
+    .btn-toggle-history {
+        padding: 8px 14px; /* Increased padding */
+        font-size: 0.9rem;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    /* Study Materials */
+    .study-materials-container {
+        padding: 15px; /* Increased padding */
+        max-width: 100%;
+        overflow-x: hidden;
+    }
+
+    .materials-page-title {
+        font-size: 1.5rem;
+        word-wrap: break-word;
+    }
+
+    .materials-upload-form {
+        padding: 20px; /* Increased padding */
+        width: 100%;
+    }
+
+    .material-item-card {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 20px; /* Increased padding */
+        width: 100%;
+        overflow-x: auto;
+    }
+
+    .material-item-actions {
+        margin-top: 15px; /* Increased margin */
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .btn-view-material,
+    .btn-delete-material {
+        flex: 1;
+        text-align: center;
+        margin: 0 5px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    /* Additional mobile fixes */
+    img, video, iframe {
+        max-width: 100%;
+        height: auto;
+    }
+
+    table {
+        width: 100%;
+        overflow-x: auto;
+        display: block;
+    }
+
+    .form-input-title,
+    .live-input,
+    .material-input-field,
+    .material-select-field {
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .question-textarea {
+        width: 100%;
+        max-width: 100%;
+    }
+}

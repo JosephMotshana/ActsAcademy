@@ -1469,3 +1469,442 @@ select.login-input:focus {
         padding-bottom: 50px;
     }
 }
+
+/* --- Mobile Responsiveness --- */
+
+@media (max-width: 768px) {
+    /* Global mobile fixes */
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        overflow-x: hidden;
+        width: 100%;
+    }
+
+    /* Review Page */
+    .review-page-wrapper {
+        padding: 25px 15px; /* Increased padding */
+        max-width: 100%;
+        overflow-x: hidden;
+    }
+
+    .review-content-container {
+        max-width: 100%;
+    }
+
+    .review-summary-card {
+        flex-direction: column;
+        text-align: center;
+        padding: 25px; /* Increased padding */
+        width: 100%;
+        overflow-x: auto;
+    }
+
+    .summary-score-section {
+        width: 100%;
+        margin-top: 25px; /* Increased margin */
+    }
+
+    .review-question-card {
+        padding: 25px; /* Increased padding */
+        width: 100%;
+        overflow-x: auto;
+    }
+
+    .question-header {
+        flex-direction: column;
+        align-items: flex-start;
+        width: 100%;
+    }
+
+    /* Student Dashboard */
+    .dashboard-wrapper {
+        padding: 30px 20px; /* More padding */
+        max-width: 100%;
+        overflow-x: hidden;
+    }
+
+    .dashboard-title {
+        font-size: 1.8rem;
+        word-wrap: break-word;
+        margin-bottom: 35px; /* More margin */
+    }
+
+    .classroom-grid {
+        grid-template-columns: 1fr;
+        gap: 25px; /* More gap */
+        width: 100%;
+    }
+
+    .classroom-card {
+        padding: 30px; /* More padding */
+        width: 100%;
+        min-width: 0; /* Allow shrinking */
+        margin-bottom: 20px; /* Add margin between cards */
+    }
+
+    .classroom-name {
+        font-size: 1.2rem;
+        word-wrap: break-word;
+        margin-bottom: 15px; /* More margin */
+    }
+
+    .lecturer-info {
+        margin-bottom: 25px; /* More margin */
+    }
+
+    /* Student History */
+    .history-container {
+        padding: 30px 20px; /* More padding */
+        max-width: 100%;
+        overflow-x: hidden;
+    }
+
+    .history-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 20px; /* More gap */
+        width: 100%;
+        margin-bottom: 30px; /* More margin */
+    }
+
+    .history-title {
+        font-size: 1.5rem;
+        word-wrap: break-word;
+    }
+
+    .history-table {
+        width: 100%;
+        overflow-x: auto; /* Allow horizontal scroll for table */
+        display: block;
+        white-space: nowrap;
+    }
+
+    .history-table th,
+    .history-table td {
+        padding: 18px 15px; /* More padding */
+        font-size: 0.9rem;
+        white-space: nowrap;
+        min-width: 80px; /* Minimum width for readability */
+    }
+
+    .btn-review-results {
+        padding: 12px 20px; /* More padding */
+        font-size: 0.7rem;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    /* Student Live Hall */
+    .live-hall-container {
+        padding: 30px 20px; /* More padding */
+        max-width: 100%;
+        overflow-x: hidden;
+    }
+
+    .live-hall-title {
+        font-size: 1.5rem;
+        word-wrap: break-word;
+        margin-bottom: 35px; /* More margin */
+    }
+
+    .live-session-card {
+        padding: 40px 30px; /* More padding */
+        width: 100%;
+        max-width: 100%;
+        margin-bottom: 25px; /* More margin */
+    }
+
+    .btn-join-meet {
+        padding: 16px 40px; /* More padding */
+        font-size: 0.8rem;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .no-live-class-box {
+        padding: 50px 30px; /* More padding */
+        width: 100%;
+        max-width: 100%;
+        margin-top: 25px; /* More margin */
+    }
+
+    /* Student Materials */
+    .materials-page-container {
+        padding: 30px 20px; /* More padding */
+        max-width: 100%;
+        overflow-x: hidden;
+    }
+
+    .materials-title {
+        font-size: 1.5rem;
+        word-wrap: break-word;
+        margin-bottom: 30px; /* More margin */
+    }
+
+    .materials-grid {
+        grid-template-columns: 1fr;
+        gap: 25px; /* More gap */
+        width: 100%;
+    }
+
+    .material-card {
+        padding: 28px; /* More padding */
+        width: 100%;
+        overflow-x: auto;
+        margin-bottom: 20px; /* More margin */
+    }
+
+    .material-actions {
+        flex-direction: column;
+        gap: 12px; /* More gap */
+        width: 100%;
+        margin-top: 25px; /* More margin */
+    }
+
+    .btn-material {
+        width: 100%;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        padding: 14px; /* More padding */
+        margin-bottom: 10px; /* More margin */
+    }
+
+    /* Student Progress */
+    .progress-container {
+        padding: 30px 20px; /* More padding */
+        max-width: 100%;
+        overflow-x: hidden;
+    }
+
+    .progress-title {
+        font-size: 1.8rem;
+        word-wrap: break-word;
+        margin-bottom: 35px; /* More margin */
+    }
+
+    .progress-table {
+        width: 100%;
+        overflow-x: auto; /* Allow horizontal scroll for table */
+        display: block;
+        white-space: nowrap;
+    }
+
+    .progress-table th,
+    .progress-table td {
+        padding: 20px 15px; /* More padding */
+        font-size: 0.9rem;
+        white-space: nowrap;
+        min-width: 80px; /* Minimum width for readability */
+    }
+
+    .btn-mark-test {
+        padding: 12px 22px; /* More padding */
+        font-size: 0.7rem;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    /* Student Tests */
+    .tests-page-container {
+        padding: 30px 20px; /* More padding */
+        max-width: 100%;
+        overflow-x: hidden;
+    }
+
+    .tests-main-title {
+        font-size: 1.8rem;
+        word-wrap: break-word;
+        margin-bottom: 30px; /* More margin */
+    }
+
+    .test-assignment-card {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 30px; /* More padding */
+        width: 100%;
+        overflow-x: auto;
+        margin-bottom: 20px; /* More margin */
+    }
+
+    .test-meta-tags {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px; /* More gap */
+        width: 100%;
+        margin-top: 20px; /* More margin */
+    }
+
+    .btn-start-assessment {
+        width: 100%;
+        margin-top: 25px; /* More margin */
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        padding: 18px; /* More padding */
+    }
+
+    /* Take Test */
+    .take-test-container {
+        padding: 30px 20px; /* More padding */
+        max-width: 100%;
+        overflow-x: hidden;
+    }
+
+    .take-test-title {
+        font-size: 1.8rem;
+        word-wrap: break-word;
+        margin-bottom: 35px; /* More margin */
+    }
+
+    .question-card {
+        padding: 30px; /* More padding */
+        width: 100%;
+        overflow-x: auto;
+        margin-bottom: 30px; /* More margin */
+    }
+
+    .option-box {
+        padding: 18px 22px; /* More padding */
+        width: 100%;
+        white-space: normal; /* Allow text wrapping in options */
+        margin-bottom: 12px; /* More margin */
+    }
+
+    .btn-submit-assessment {
+        padding: 20px; /* More padding */
+        font-size: 1rem;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        margin-top: 30px; /* More margin */
+    }
+
+    /* Classroom Manager */
+    .classroom-manager-layout {
+        flex-direction: column;
+        width: 100%;
+        overflow-x: hidden;
+    }
+
+    .classroom-manager-sidebar {
+        width: 100%;
+        position: relative;
+        min-width: 0;
+    }
+
+    .classroom-manager-content {
+        padding: 30px 20px; /* More padding */
+        width: 100%;
+        overflow-x: hidden;
+    }
+
+    .classroom-manager-panel {
+        padding: 25px; /* More padding */
+        min-height: auto;
+        width: 100%;
+        overflow-x: auto; /* Allow horizontal scroll if needed for tables */
+    }
+
+    /* Login/Register */
+    .login-page-wrapper {
+        padding: 30px 20px; /* More padding */
+        max-width: 100%;
+        overflow-x: hidden;
+    }
+
+    .login-card {
+        padding: 40px 30px; /* More padding */
+        max-width: 100%;
+        width: 100%;
+        margin-bottom: 25px; /* More margin */
+    }
+
+    .login-welcome-text {
+        font-size: 1.5rem;
+        word-wrap: break-word;
+        margin-bottom: 18px; /* More margin */
+    }
+
+    .login-subtitle {
+        font-size: 0.9rem;
+        word-wrap: break-word;
+        margin-bottom: 25px; /* More margin */
+    }
+
+    .login-input {
+        width: 100%;
+        max-width: 100%;
+        padding: 14px; /* More padding */
+        font-size: 1rem;
+        margin-bottom: 18px; /* More margin */
+    }
+
+    .btn-login-submit {
+        width: 100%;
+        padding: 16px; /* More padding */
+        font-size: 1rem;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        margin-bottom: 18px; /* More margin */
+    }
+
+    .btn-outline-register {
+        width: 100%;
+        padding: 16px; /* More padding */
+        font-size: 1rem;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .form-row {
+        flex-direction: column;
+        width: 100%;
+        gap: 18px; /* More gap */
+        text-overflow: ellipsis;
+    }
+
+    .btn-outline-register {
+        width: 100%;
+        padding: 15px; /* Increased padding */
+        font-size: 1rem;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .form-row {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .register-mode .login-card {
+        width: 100%;
+        max-width: 100%;
+    }
+
+    /* Additional mobile fixes */
+    img, video, iframe {
+        max-width: 100%;
+        height: auto;
+    }
+
+    table {
+        width: 100%;
+        overflow-x: auto;
+        display: block;
+    }
+
+    .essay-input {
+        width: 100%;
+        max-width: 100%;
+    }
+}
