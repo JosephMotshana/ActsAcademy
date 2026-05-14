@@ -60,7 +60,7 @@ function App() {
             {user && (
                 <nav style={{ 
                     padding: '15px 30px', 
-                    background: '#1a305e;', 
+                    background: '#1a305e', 
                     color: 'white', 
                     display: 'flex', 
                     justifyContent: 'space-between', 

@@ -1405,6 +1405,33 @@
     transform: translateY(-1px);
 }
 
+/* Create an Account Button - Outline Style */
+.btn-outline-register {
+    background-color: transparent;
+    border: 2px solid #c5a059; /* Gold border */
+    color: #c5a059;
+    padding: 14px 32px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border-radius: 50px; /* Pill-shaped */
+    font-size: 0.85rem;
+    width: auto;
+}
+
+.btn-outline-register:hover {
+    background-color: #c5a059; /* Switches to solid gold */
+    color: #1a305e;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(197, 160, 89, 0.3);
+}
+
+.btn-outline-register:active {
+    transform: translateY(0);
+}
+
 /* --- Registration & Role Selection --- */
 
 /* Success State Icon */
@@ -1860,9 +1887,25 @@ select.login-input:focus {
         width: 100%;
         padding: 16px; /* More padding */
         font-size: 1rem;
+        border: 2px solid #c5a059; /* Gold border */
+        background-color: transparent;
+        color: #c5a059;
+        border-radius: 50px; /* Pill-shaped */
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 1.5px;
+        cursor: pointer;
+        transition: all 0.3s ease;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
+    }
+
+    .btn-outline-register:hover {
+        background-color: #c5a059;
+        color: #1a305e;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 16px rgba(197, 160, 89, 0.3);
     }
 
     .form-row {
@@ -1876,6 +1919,15 @@ select.login-input:focus {
         width: 100%;
         padding: 15px; /* Increased padding */
         font-size: 1rem;
+        border: 2px solid #c5a059; /* Gold border */
+        background-color: transparent;
+        color: #c5a059;
+        border-radius: 50px; /* Pill-shaped */
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 1.5px;
+        cursor: pointer;
+        transition: all 0.3s ease;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
