@@ -8,7 +8,7 @@ const db = require('./config/db');
 const authRoutes = require('./routes/authRoutes');
 const adminRoutes = require('./routes/adminRoutes');
 const lecturerRoutes = require('./routes/lecturerRoutes');
-const studentRoutes = require('./routes/studentRoutes');
+const studentRoutes = require('./routes/StudentRoutes');
 
 const app = express();
 
