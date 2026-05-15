@@ -27,7 +27,7 @@ router.post('/submit-test', studentController.submitQuiz);
 // --- REVIEW & LIVE ---
 router.get('/live-link/:classId', studentController.getLiveLink);
 
-// FIXED TYPO HERE: Changed .g to .get and removed the trailing 'et'
+// FIXED TYPO HERE: Changed .g to .get and removed the trailing'et'
 router.get('/review/:quizId/:studentId', studentController.getSubmissionReview);
 
 module.exports = router;
