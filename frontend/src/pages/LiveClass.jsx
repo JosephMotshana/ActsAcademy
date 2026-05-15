@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
-import '../../style/global.css';
+import '../../Style/global.css';
 
 const LiveClass = () => {
     const { classId } = useParams();

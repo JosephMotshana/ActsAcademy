@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useParams, useNavigate, Link } from 'react-router-dom';
-import '../../style/global.css';
+import '../../Style/global.css';
 
 const MarkAssessment = () => {
     const { classId, studentId } = useParams();

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import '../../style/StudentGlobal.css';
+import '../../Style/StudentGlobal.css';
 
 const StudentDashboard = ({ studentId }) => {
     const [enrolledClasses, setEnrolledClasses] = useState([]);

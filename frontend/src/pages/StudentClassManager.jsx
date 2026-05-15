@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useParams, Link, Outlet, useNavigate } from 'react-router-dom';
-import '../../style/StudentGlobal.css';
+import '../../Style/StudentGlobal.css';
 
 const StudentClassManager = () => {
     const { classId } = useParams();
