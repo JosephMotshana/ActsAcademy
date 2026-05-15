@@ -11,7 +11,7 @@ const LecturerDashboard = ({ lecturerId }) => {
     useEffect(() => {
         const fetchClasses = async () => {
             try {
-                const res = await axios.get(`/api/lecturer/my-classes/${lecturerId}`);
+                const res = await axios.get(`http://localhost:5000/api/lecturer/my-classes/${lecturerId}`);
                 setMyClasses(res.data);
             } catch (err) {
                 console.error("Error loading classes", err);

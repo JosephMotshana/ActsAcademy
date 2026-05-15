@@ -11,7 +11,7 @@ const ManageQuizzes = () => {
 
     const fetchQuizzes = async () => {
         try {
-            const res = await axios.get(`/api/lecturer/classroom/${classId}/quizzes`);
+            const res = await axios.get(`http://localhost:5000/api/lecturer/classroom/${classId}/quizzes`);
             setQuizzes(res.data);
             setLoading(false);
         } catch (err) {
@@ -25,7 +25,7 @@ const ManageQuizzes = () => {
     const handleDelete = async (quizId) => {
         if (window.confirm("Are you sure? This will delete all questions and student results for this quiz.")) {
             try {
-                await axios.delete(`/api/lecturer/quiz/${quizId}`);
+                await axios.delete(`http://localhost:5000/api/lecturer/quiz/${quizId}`);
                 setQuizzes(quizzes.filter(q => q.id !== quizId));
                 alert("Assessment deleted.");
             } catch (err) {

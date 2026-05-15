@@ -18,7 +18,7 @@ const StudentDashboard = ({ studentId }) => {
             }
 
             try {
-                const res = await axios.get(`/api/student/my-classes/${idToUse}`);
+                const res = await axios.get(`http://localhost:5000/api/student/my-classes/${idToUse}`);
                 setEnrolledClasses(res.data);
             } catch (err) {
                 console.error("Error fetching student classes:", err);

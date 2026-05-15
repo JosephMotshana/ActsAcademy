@@ -8,7 +8,7 @@ const AdminPanel = () => {
   const handleDelete = async (id) => {
     if (window.confirm("Are you sure you want to remove this lecturer?")) {
       try {
-        await axios.delete(`/api/admin/lecturer/${id}`);
+        await axios.delete(`http://localhost:5000/api/admin/lecturer/${id}`);
         // Refresh the list after deleting
         setLecturers(lecturers.filter(lec => lec.id !== id));
         alert("Lecturer removed successfully");

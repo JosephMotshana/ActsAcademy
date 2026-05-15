@@ -12,7 +12,7 @@ const AddStudent = ({ onStudentAdded }) => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            await axios.post('/api/auth/register', formData);
+            await axios.post('http://localhost:5000/api/auth/register', formData);
             alert("Student registered!");
             setFormData({ username: '', email: '', password: '', role: 'STUDENT' });
             onStudentAdded();

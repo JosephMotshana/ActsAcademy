@@ -15,7 +15,7 @@ const MarkAssessment = () => {
     const fetchStudentsWithPending = async () => {
         setLoading(true);
         try {
-            const res = await axios.get(`/api/lecturer/pending-students/${classId}`);
+            const res = await axios.get(`http://localhost:5000/api/lecturer/pending-students/${classId}`);
             setStudentsWithPending(res.data); 
         } catch (err) {
             console.error("Error fetching students with pending marks:", err);
@@ -29,7 +29,7 @@ const MarkAssessment = () => {
     const fetchPending = async () => {
         setLoading(true);
         try {
-            const res = await axios.get(`/api/lecturer/pending-marks/${classId}/${studentId}`);
+            const res = await axios.get(`http://localhost:5000/api/lecturer/pending-marks/${classId}/${studentId}`);
             setPendingAnswers(res.data);
         } catch (err) {
             console.error("Error fetching pending marks:", err);
@@ -57,7 +57,7 @@ const MarkAssessment = () => {
         if (score < 0) return alert("Score cannot be negative. Please enter zero or higher.");
         
         try {
-            await axios.post(`/api/lecturer/submit-mark`, {
+            await axios.post(`http://localhost:5000/api/lecturer/submit-mark`, {
                 answerId,
                 marks: score
             });
