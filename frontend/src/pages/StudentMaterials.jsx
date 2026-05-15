@@ -10,7 +10,7 @@ const StudentMaterials = () => {
 
     const fetchMaterials = async () => {
         try {
-            const res = await axios.get(`http://localhost:5000/api/student/materials/${classId}`);
+            const res = await axios.get(`/api/student/materials/${classId}`);
             setMaterials(res.data);
             setLoading(false);
         } catch (err) {
@@ -26,7 +26,8 @@ const StudentMaterials = () => {
     const getCorrectUrl = (path) => {
         if (!path) return "#";
         if (path.startsWith('http')) return path;
-        return `http://localhost:5000${path}`;
+        const { getApiBase } = await import('../api/axiosConfig');
+        return `${getApiBase()}${path}`;
     };
 
     const downloadFile = (url, fileName) => {

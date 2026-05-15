@@ -12,7 +12,7 @@ const LiveClass = () => {
 
     const fetchCurrentStatus = async () => {
         try {
-            const res = await axios.get(`http://localhost:5000/api/lecturer/live-status/${classId}`);
+            const res = await axios.get(`/api/lecturer/live-status/${classId}`);
             setCurrentClass(res.data);
         } catch (err) {
             console.error("Error fetching status", err);
@@ -26,7 +26,7 @@ const LiveClass = () => {
         
         setLoading(true);
         try {
-            await axios.post('http://localhost:5000/api/lecturer/update-live-link', { 
+            await axios.post('/api/lecturer/update-live-link', { 
                 classId, 
                 live_link: link, 
                 scheduled_time: startTime 
@@ -78,7 +78,7 @@ const LiveClass = () => {
                         <button 
                             className="btn-remove"
                             onClick={async () => {
-                                await axios.post('http://localhost:5000/api/lecturer/update-live-link', { classId, live_link: null, scheduled_time: null });
+                                await axios.post('live-link', { classId, live_link: null, scheduled_time: null });
                                 fetchCurrentStatus();
                             }}
                         >

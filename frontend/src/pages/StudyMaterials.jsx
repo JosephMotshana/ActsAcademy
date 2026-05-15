@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { getApiBase } from '../api/axiosConfig';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import '../../Style/global.css';
@@ -13,7 +14,7 @@ const StudyMaterials = () => {
 
     const fetchMaterials = async () => {
         try {
-            const res = await axios.get(`http://localhost:5000/api/lecturer/materials/${classId}`);
+            const res = await axios.get(`/api/lecturer/materials/${classId}`);
             setMaterials(res.data);
         } catch (err) {
             console.error("Error fetching materials", err);
@@ -48,7 +49,7 @@ const StudyMaterials = () => {
         }
 
         try {
-            await axios.post('http://localhost:5000/api/lecturer/add-material', formData);
+            await axios.post('/api/lecturer/add-material', formData);
             alert("Uploaded successfully!");
             setTitle('');
             setLink('');
@@ -64,7 +65,7 @@ const StudyMaterials = () => {
     const handleDelete = async (id) => {
         if (window.confirm("Delete this material?")) {
             try {
-                await axios.delete(`http://localhost:5000/api/lecturer/material/${id}`);
+                await axios.delete(`/api/lecturer/material/${id}`);
                 fetchMaterials();
             } catch (err) {
                 alert("Failed to delete material.");
@@ -134,7 +135,7 @@ const StudyMaterials = () => {
                             </div>
                             <div className="material-item-actions">
                                 <a 
-                                    href={m.file_url && m.file_url.startsWith('http') ? m.file_url : `http://localhost:5000${m.file_url}`} 
+                                    href={m.file_url && m.file_url.startsWith('http') ? m.file_url : `${getApiBase()}${m.file_url}`} 
                                     target="_blank" 
                                     rel="noreferrer" 
                                     className="btn-view-material"
