@@ -5,5 +5,16 @@
     ],
     "routes": [
         { "src": "/api/(.*)", "dest": "/api/index.js" }
-    ]
+    ],
+    "experimentalServices": {
+        "frontend": {
+            "entrypoint": "frontend",
+            "routePrefix": "/",
+            "framework": "vite"
+        },
+        "backend": {
+            "entrypoint": "backend",
+            "routePrefix": "/_/backend"
+        }
+    }
 }
