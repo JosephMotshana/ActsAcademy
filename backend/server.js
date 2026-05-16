@@ -40,12 +40,26 @@ app.get('/api/status', (req, res) => {
 
 // --- Server Startup & DB Connection ---
 const PORT = process.env.PORT || 5000;
+const app = require('./app');
+const db = require('./config/db');
 
+const PORT = process.env.PORT || 5000;
+
+db.query('SELECT 1').then(() => {
+  app.listen(PORT, () => console.log(`Server listening on ${PORT}`));
+}).catch(err => console.error('DB error:', err));
 db.query('SELECT 1')
   .then(() => {
     console.log('Successfully connected to MySQL database!');
     app.listen(PORT, () => {
-      console.log(`Server is running on port ${PORT}`);
+           const app = require('./app');
+      const db = require('./config/db');
+      
+      const PORT = process.env.PORT || 5000;
+      
+      db.query('SELECT 1').then(() => {
+        app.listen(PORT, () => console.log(`Server listening on ${PORT}`));
+      }).catch(err => console.error('DB error:', err)); console.log(`Server is running on port ${PORT}`);
     });
   })
   .catch((err) => {
