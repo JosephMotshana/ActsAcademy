@@ -11,7 +11,7 @@ const TakeTest = () => {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        axios.get(`http://localhost:5000/api/student/test-details/${testId}`)
+        axios.get(`/api/student/test-details/${testId}`)
             .then(res => {
                 setTest(res.data);
                 setLoading(false);
@@ -42,7 +42,7 @@ const TakeTest = () => {
                 answers: answers 
             };
 
-            const response = await axios.post(`http://localhost:5000/api/student/submit-quiz`, payload);
+            const response = await axios.post(`/api/student/submit-quiz`, payload);
             
             if (response.status === 201 || response.status === 200) {
                 alert("Assessment submitted successfully!");

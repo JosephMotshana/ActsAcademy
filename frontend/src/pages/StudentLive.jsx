@@ -10,7 +10,7 @@ const StudentLive = () => {
 
     const fetchSession = async () => {
         try {
-            const res = await axios.get(`http://localhost:5000/api/admin/classroom/${classId}`);
+            const res = await axios.get(`/api/admin/classroom/${classId}`);
             setSession(res.data);
         } catch (err) {
             console.error("Error fetching live link", err);

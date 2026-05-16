@@ -11,7 +11,7 @@ const StudentHistory = ({ user }) => {
 
     const fetchHistory = async () => {
         try {
-            const res = await axios.get(`http://localhost:5000/api/student/test-history/${classId}/${user.id}`);
+            const res = await axios.get(`/api/student/test-history/${classId}/${user.id}`);
             setHistory(res.data);
         } catch (err) {
             console.error("Error fetching history", err);

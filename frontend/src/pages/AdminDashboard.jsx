@@ -16,10 +16,10 @@ const AdminDashboard = () => {
     const fetchData = async () => {
         try {
             const [lecRes, classRes, studRes, enrollRes] = await Promise.all([
-                axios.get('http://localhost:5000/api/admin/lecturers'),
-                axios.get('http://localhost:5000/api/admin/classrooms'),
-                axios.get('http://localhost:5000/api/admin/students'),
-                axios.get('http://localhost:5000/api/admin/enrollments')
+                axios.get('/api/admin/lecturers'),
+                axios.get('/api/admin/classrooms'),
+                axios.get('/api/admin/students'),
+                axios.get('/api/admin/enrollments')
             ]);
             setLecturers(lecRes.data);
             setClassrooms(classRes.data);
@@ -38,7 +38,7 @@ const AdminDashboard = () => {
     const handleEnroll = async (e) => {
         e.preventDefault();
         try {
-            await axios.post('http://localhost:5000/api/admin/enroll', { 
+            await axios.post('/api/admin/enroll', { 
                 studentId: enrollmentData.student_id, 
                 classroomId: enrollmentData.classroom_id 
             });
@@ -54,7 +54,7 @@ const AdminDashboard = () => {
     const deleteUser = async (id) => {
         if (window.confirm("Remove this student permanently? This will also unenroll them from all classes.")) {
             try {
-                await axios.delete(`http://localhost:5000/api/admin/student/${id}`);
+                await axios.delete(`/api/admin/student/${id}`);
                 fetchData();
             } catch (err) { alert("Delete failed"); }
         }
@@ -63,8 +63,8 @@ const AdminDashboard = () => {
     // --- UNENROLL LOGIC (From specific class) ---
     const handleUnenroll = async (studentId, classroomId) => {
         if (!window.confirm("Remove student from this specific class?")) return;
-        try {
-            await axios.delete(`http://localhost:5000/api/admin/unenroll/${studentId}/${classroomId}`);
+            try {
+                await axios.delete(`/api/admin/unenroll/${studentId}/${classroomId}`);
             alert("Student unenrolled");
             fetchData();
         } catch (err) {
@@ -75,7 +75,7 @@ const AdminDashboard = () => {
     const deleteClassroom = async (id) => {
         if (window.confirm("Delete this class? Enrollment data will be lost.")) {
             try {
-                await axios.delete(`http://localhost:5000/api/admin/classroom/${id}`);
+                await axios.delete(`/api/admin/classroom/${id}`);
                 fetchData();
             } catch (err) { alert("Delete failed"); }
         }
@@ -83,7 +83,7 @@ const AdminDashboard = () => {
 
     const reassignLecturer = async (classroomId, lecturerId) => {
         try {
-            await axios.post('http://localhost:5000/api/admin/reassign-lecturer', { classroomId, lecturerId });
+            await axios.post('/api/admin/reassign-lecturer', { classroomId, lecturerId });
             alert("Lecturer reassigned!");
             fetchData();
         } catch (err) {

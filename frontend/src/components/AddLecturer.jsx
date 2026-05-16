@@ -16,7 +16,7 @@ const AddLecturer = ({ onLecturerAdded }) => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            await axios.post('http://localhost:5000/api/auth/register', formData);
+            await axios.post('/api/auth/register', formData);
             alert("Lecturer added successfully!");
             setFormData({ username: '', email: '', password: '', role: 'LECTURER' });
             onLecturerAdded(); // This refreshes the list in the parent component

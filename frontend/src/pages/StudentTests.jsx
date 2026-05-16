@@ -14,7 +14,7 @@ const StudentTests = ({ user }) => {
         const fetchAvailable = async () => {
             try {
                 if (classId && user?.id) {
-                    const res = await axios.get(`http://localhost:5000/api/student/available-tests/${classId}/${user.id}`);
+                    const res = await axios.get(`/api/student/available-tests/${classId}/${user.id}`);
                     setAvailableTests(res.data);
                 }
                 setLoading(false);

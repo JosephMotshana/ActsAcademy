@@ -16,7 +16,7 @@ const CreateOrEditQuiz = () => {
 
     useEffect(() => {
         if (isEditMode) {
-            axios.get(`http://localhost:5000/api/lecturer/quiz-details/${quizId}`)
+            axios.get(`/api/lecturer/quiz-details/${quizId}`)
                 .then(res => {
                     setQuizData(res.data);
                 })
@@ -53,10 +53,10 @@ const CreateOrEditQuiz = () => {
         e.preventDefault();
         try {
             if (isEditMode) {
-                await axios.put(`http://localhost:5000/api/lecturer/quiz/${quizId}`, quizData);
+                await axios.put(`/api/lecturer/quiz/${quizId}`, quizData);
                 alert("Assessment updated successfully!");
             } else {
-                await axios.post(`http://localhost:5000/api/lecturer/create-quiz/${classId}`, quizData);
+                await axios.post(`/api/lecturer/create-quiz/${classId}`, quizData);
                 alert("Assessment published!");
             }
             const finalClassId = classId || quizData.classroom_id;

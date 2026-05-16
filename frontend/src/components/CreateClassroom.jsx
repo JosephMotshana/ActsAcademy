@@ -9,7 +9,7 @@ const CreateClassroom = ({ lecturers, onClassCreated }) => {
         e.preventDefault();
         try {
             // Note: The URL must match your backend route exactly
-            await axios.post('http://localhost:5000/api/admin/create-classroom', {
+            await axios.post('/api/admin/create-classroom', {
                 classroomname: classroomName,
                 lecturer_id: lecturerId
             });
