@@ -1,34 +1,24 @@
-// import { StrictMode } from 'react'
-// import { createRoot } from 'react-dom/client'
-// import App from './App.jsx'
-
-// createRoot(document.getElementById('root')).render(
-//   <StrictMode>
-//     <App />
-//   </StrictMode>,
-// );
-
- import React from 'react';
- import ReactDOM from 'react-dom/client';
+import React from 'react';
+import ReactDOM from 'react-dom/client';
 import axios from 'axios';
- import App from './App';
- import { BrowserRouter } from 'react-router-dom'; // 1. Import this
+import App from './App';
+import { BrowserRouter } from 'react-router-dom'; // 1. Import this
 
+// Configure global axios base URL from Vite env or fall back to your live Vercel backend URL
+const API_URL = import.meta.env.VITE_API_URL || 'https://acts-academy.vercel.app';
+axios.defaults.baseURL = API_URL;
 
-// Configure global axios base URL from Vite env or use relative paths in production
-const API_URL = import.meta.env.VITE_API_URL || '';
-axios.defaults.baseURL = API_URL || '';
 // Expose to window for non-axios uses (links, fetch, etc.)
-window.__API_URL__ = API_URL || '';
+window.__API_URL__ = API_URL;
 
-// Interceptor: rewrite any hardcoded localhost:5000 requests to the configured API URL
+// Interceptor: rewrite any hardcoded localhost:5000 requests to your live production API URL
 axios.interceptors.request.use((config) => {
    try {
       if (config && config.url) {
          if (config.url.startsWith('http://localhost:5000')) {
-            config.url = config.url.replace('http://localhost:5000', API_URL || '');
+            config.url = config.url.replace('http://localhost:5000', API_URL);
          } else if (config.url.startsWith('https://localhost:5000')) {
-            config.url = config.url.replace('https://localhost:5000', API_URL || '');
+            config.url = config.url.replace('https://localhost:5000', API_URL);
          }
       }
    } catch (e) {
