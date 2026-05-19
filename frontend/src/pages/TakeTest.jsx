@@ -11,7 +11,8 @@ const TakeTest = () => {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        axios.get(`http://localhost:5000/api/student/test-details/${testId}`)
+        // Updated: Removed localhost:5000 to use your production base URL automatically
+        axios.get(`/api/student/test-details/${testId}`)
             .then(res => {
                 setTest(res.data);
                 setLoading(false);
@@ -42,7 +43,8 @@ const TakeTest = () => {
                 answers: answers 
             };
 
-            const response = await axios.post(`http://localhost:5000/api/student/submit-quiz`, payload);
+            // Updated: Removed localhost:5000
+            const response = await axios.post(`/api/student/submit-quiz`, payload);
             
             if (response.status === 201 || response.status === 200) {
                 alert("Assessment submitted successfully!");

@@ -10,7 +10,8 @@ const StudentMaterials = () => {
 
     const fetchMaterials = async () => {
         try {
-            const res = await axios.get(`http://localhost:5000/api/student/materials/${classId}`);
+            // Updated: Removed http://localhost:5000 to use production path routing
+            const res = await axios.get(`/api/student/materials/${classId}`);
             setMaterials(res.data);
             setLoading(false);
         } catch (err) {
@@ -27,7 +28,8 @@ const StudentMaterials = () => {
         if (!path) return "#";
         if (path.startsWith('http')) return path;
 
-        return `http://localhost:5000${path}`;
+        // Updated: Using the global window variable instead of hardcoded localhost
+        return `${window.__API_URL__ || ''}${path}`;
     };
 
     const downloadFile = (url, fileName) => {
@@ -41,7 +43,6 @@ const StudentMaterials = () => {
                 a.download = fileName;
                 document.body.appendChild(a);
                 a.click();
-                a.click(); // Double click for some browsers
                 window.URL.revokeObjectURL(blobURL);
             })
             .catch(() => window.open(url, '_blank'));

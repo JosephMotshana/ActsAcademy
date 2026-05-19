@@ -79,7 +79,7 @@ const LiveClass = () => {
                             className="btn-remove"
                             onClick={async () => {
 
-                                await axios.post('http://localhost:5000/api/lecturer/update-live-link', { classId, live_link: null, scheduled_time: null });
+                                await axios.post('/api/lecturer/update-live-link', { classId, live_link: null, scheduled_time: null });
                                 fetchCurrentStatus();
                             }}
                         >

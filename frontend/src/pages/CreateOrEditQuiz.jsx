@@ -53,10 +53,10 @@ const CreateOrEditQuiz = () => {
         e.preventDefault();
         try {
             if (isEditMode) {
-                await axios.put(`http://localhost:5000/api/lecturer/quiz/${quizId}`, quizData);
+                await axios.put(`/api/lecturer/quiz/${quizId}`, quizData);
                 alert("Assessment updated successfully!");
             } else {
-                await axios.post(`http://localhost:5000/api/lecturer/create-quiz/${classId}`, quizData);
+                await axios.post(`/api/lecturer/create-quiz/${classId}`, quizData);
                 alert("Assessment published!");
             }
             const finalClassId = classId || quizData.classroom_id;

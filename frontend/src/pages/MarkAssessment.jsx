@@ -30,7 +30,7 @@ const MarkAssessment = () => {
         setLoading(true);
         try {
 
-            const res = await axios.get(`http://localhost:5000/api/lecturer/pending-marks/${classId}/${studentId}`);
+            const res = await axios.get(`/api/lecturer/pending-marks/${classId}/${studentId}`);
 
             setPendingAnswers(res.data);
         } catch (err) {
@@ -59,7 +59,7 @@ const MarkAssessment = () => {
         if (score < 0) return alert("Score cannot be negative. Please enter zero or higher.");
         
         try {
-            await axios.post(`http://localhost:5000/api/lecturer/submit-mark`, {
+            await axios.post(`/api/lecturer/submit-mark`, {
                 answerId,
                 marks: score
             });

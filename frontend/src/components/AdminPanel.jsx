@@ -10,7 +10,7 @@ const AdminPanel = () => {
       try {
 
 
-        await axios.delete(`http://localhost:5000/api/admin/lecturer/${id}`);
+        await axios.delete(`/api/admin/lecturer/${id}`);
 
         // Refresh the list after deleting
         setLecturers(lecturers.filter(lec => lec.id !== id));
