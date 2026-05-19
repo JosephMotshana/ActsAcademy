@@ -7,7 +7,7 @@ const db = require('./config/db');
 // Import Routes
 const authRoutes = require('./routes/authRoutes');
 const adminRoutes = require('./routes/adminRoutes');
-const lecturerRoutes = require('./routes/LecturerRoutes');
+const lecturerRoutes = require('./routes/lecturerRoutes');
 const studentRoutes = require('./routes/StudentRoutes');
 
 const app = express();
