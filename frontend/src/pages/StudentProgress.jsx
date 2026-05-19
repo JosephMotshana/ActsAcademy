@@ -11,7 +11,8 @@ const StudentProgress = () => {
     useEffect(() => {
         const fetchProgress = async () => {
             try {
-                    const res = await axios.get(`/api/lecturer/performance/${classId}`);
+
+                const res = await axios.get(`http://localhost:5000/api/lecturer/performance/${classId}`);
                 setRoster(res.data);
             } catch (err) {
                 console.error("Error fetching progress:", err);

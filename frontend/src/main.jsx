@@ -10,9 +10,10 @@
 
  import React from 'react';
  import ReactDOM from 'react-dom/client';
-import App from './App';
-import { BrowserRouter } from 'react-router-dom'; // 1. Import this
 import axios from 'axios';
+ import App from './App';
+ import { BrowserRouter } from 'react-router-dom'; // 1. Import this
+
 
 // Configure global axios base URL from Vite env or use relative paths in production
 const API_URL = import.meta.env.VITE_API_URL || '';

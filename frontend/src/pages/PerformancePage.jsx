@@ -15,7 +15,7 @@ const PerformancePage = () => {
     const fetchPerformance = useCallback(async () => {
         setLoading(true);
         try {
-            const res = await axios.get(`/api/lecturer/performance/${classId}`);
+            const res = await axios.get(`http://localhost:5000/api/lecturer/performance/${classId}`);
             setStudents(res.data);
         } catch (err) {
             console.error("Error fetching performance data", err);
@@ -31,7 +31,7 @@ const PerformancePage = () => {
 
         setHistoryLoading(prev => ({ ...prev, [studentId]: true }));
         try {
-            const res = await axios.get(`/api/student/test-history/${classId}/${studentId}`);
+            const res = await axios.get(`http://localhost:5000/api/student/test-history/${classId}/${studentId}`);
             setStudentHistories(prev => ({ ...prev, [studentId]: res.data }));
         } catch (err) {
             console.error(`Error fetching quiz history for student ${studentId}`, err);
